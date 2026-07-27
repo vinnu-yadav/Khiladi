@@ -8,6 +8,7 @@ const firebaseConfig = {
     storageBucket: "tournament-a7659.firebasestorage.app",
     messagingSenderId: "458496922243",
     appId: "1:458496922243:web:feb3c8c5a749e31f4a01b6"
+    measurementId: "G-FK9L8N9WSD"
 };
 
 firebase.initializeApp(firebaseConfig);
