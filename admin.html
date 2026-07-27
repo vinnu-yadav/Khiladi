@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khiladi – Admin</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <!-- Admin Login -->
+    <div id="admin-login" class="container">
+        <h2>🔐 Admin Login</h2>
+        <input type="email" id="admin-email" placeholder="Email" />
+        <input type="password" id="admin-password" placeholder="Password" />
+        <button onclick="loginAdmin()" class="btn-primary">Login</button>
+        <div id="admin-login-error" class="error-msg"></div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="container hidden">
+        <header>
+            <div class="brand">🛠️ Khiladi Admin</div>
+            <button id="admin-logout-btn" class="btn-danger">Logout</button>
+        </header>
+
+        <section class="admin-section">
+            <h3>➕ Add Game</h3>
+            <input type="text" id="game-name" placeholder="Game Name" />
+            <input type="text" id="game-pic" placeholder="Image URL (optional)" />
+            <button onclick="addNewGame()" class="btn-primary">Add Game</button>
+        </section>
+
+        <section class="admin-section">
+            <h3>🏆 Create Tournament</h3>
+            <select id="select-game-dropdown"><option value="">Select Game</option></select>
+            <input type="text" id="t-time" placeholder="Time (e.g., 08:00 PM)" />
+            <input type="number" id="t-entry" placeholder="Entry Fee (₹)" value="10" />
+            <input type="number" id="t-total" placeholder="Total Slots" value="50" />
+            <select id="t-status">
+                <option value="upcoming">Upcoming</option>
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
+            </select>
+            <button onclick="createTournament()" class="btn-primary">Create</button>
+        </section>
+
+        <section class="admin-section">
+            <h3>💸 Withdrawal Requests</h3>
+            <div id="withdrawal-requests-list"></div>
+        </section>
+
+        <section class="admin-section">
+            <h3>📝 Update Room Details & Players</h3>
+            <div id="admin-tournaments-manage"></div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
