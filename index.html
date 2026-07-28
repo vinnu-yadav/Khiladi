@@ -134,12 +134,11 @@
             <div id="authError" class="error-msg" style="margin-top:10px;"></div>
         </div>
     </div>
-      <div id="mainApp" class="hidden">
-    </div>
+
+    <div id="mainApp" class="hidden">
         <div class="topbar">
             <div class="logo">🏆 Tournament Arena</div>
             <div class="wallet-badge">💰 ₹<span id="totalWallet">0</span></div>
-        </div>
         </div>
 
         <div class="container">
@@ -345,6 +344,7 @@
                 document.getElementById('mainApp').classList.add('hidden');
             }
         });
+
         function loadUserData() {
             db.ref('users/' + currentUser.uid).on('value', snap => {
                 userData = snap.val() || {};
@@ -407,7 +407,6 @@
             event.target.classList.add('active');
             renderGameTournaments(status);
         }
-
         function renderGameTournaments(filter) {
             const container = document.getElementById('gameTournamentsList');
             let html = '';
@@ -546,6 +545,7 @@
                 .then(() => alert('Successfully joined tournament!'))
                 .catch(err => alert('Error: ' + err.message));
         }
+
         function loadMyTournaments() {
             const container = document.getElementById('myTournamentsList');
             if (!userData || !userData.joinedTournaments) {
@@ -604,7 +604,6 @@
             });
             container.innerHTML = html || '<div class="no-data">No tournaments joined</div>';
         }
-
         function selectAmount(amt) {
             selectedTopupAmount = amt;
             document.getElementById('customAmount').value = '';
@@ -647,6 +646,7 @@
                 msgEl.innerHTML = '<span class="error-msg">' + err.message + '</span>';
             });
         }
+
         function loadTransactions() {
             db.ref('transactions')
                 .orderByChild('userId')
@@ -695,3 +695,4 @@
     </script>
 </body>
 </html>
+
