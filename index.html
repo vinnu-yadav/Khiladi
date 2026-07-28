@@ -188,7 +188,7 @@
                         <button class="amount-btn" onclick="selectAmount(50)">₹50</button>
                         <button class="amount-btn" onclick="selectAmount(100)">₹100</button>
                         <button class="amount-btn" onclick="selectAmount(200)">₹200</button>
-                        <button class="amount-btn" onclick="selectAmount(500)">₹500</button>
+                                                <button class="amount-btn" onclick="selectAmount(500)">₹500</button>
                         <button class="amount-btn" onclick="selectAmount(1000)">₹1000</button>
                         <button class="amount-btn" onclick="selectAmount(2000)">₹2000</button>
                     </div>
@@ -198,6 +198,38 @@
                     </div>
                     <button class="btn" onclick="processTopup()">Add Money</button>
                     <div id="topupMsg" style="margin-top: 10px; text-align: center;"></div>
+                </div>
+
+                <!-- UPI Setup (First Time Only) -->
+                <div id="upiSetupSection" class="hidden" style="margin-top: 25px;">
+                    <div class="topup-section" style="border-color: #f39c12;">
+                        <h3 style="text-align: center; margin-bottom: 10px; color: #f39c12;">🔗 Link Your UPI / Phone</h3>
+                        <p style="text-align: center; color: #aaa; margin-bottom: 20px;">Enter your UPI ID or Phone Number for withdrawals. <strong style="color:#e94560;">This cannot be changed later.</strong></p>
+                        <div class="form-group">
+                            <label>UPI ID or Phone Number</label>
+                            <input type="text" id="setupUpiId" placeholder="yourname@upi or 9876543210">
+                        </div>
+                        <button class="btn" style="background: #f39c12; color: #000;" onclick="saveUpiId()">Save & Continue</button>
+                        <div id="upiSetupMsg" style="margin-top: 10px; text-align: center;"></div>
+                    </div>
+                </div>
+
+                <!-- Withdraw Form (Shown after UPI is set) -->
+                <div id="withdrawFormSection" class="hidden" style="margin-top: 25px;">
+                    <div class="topup-section" style="border-color: #2ecc71;">
+                        <h3 style="text-align: center; margin-bottom: 10px; color: #2ecc71;">💸 Withdraw Winnings</h3>
+                        <p style="text-align: center; color: #aaa; margin-bottom: 20px;">Minimum withdrawal is ₹200.</p>
+                        <div style="background: #16213e; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333;">
+                            <span style="color: #aaa; font-size: 13px;">Linked UPI / Phone:</span>
+                            <div id="savedUpiDisplay" style="color: #2ecc71; font-weight: bold; font-size: 16px; margin-top: 4px;">—</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount (₹)</label>
+                            <input type="number" id="withdrawAmount" placeholder="e.g., 500" min="200">
+                        </div>
+                        <button class="btn" style="background: #2ecc71;" onclick="requestWithdrawal()">Request Withdrawal</button>
+                        <div id="withdrawMsg" style="margin-top: 10px; text-align: center;"></div>
+                    </div>
                 </div>
 
                 <div style="margin-top: 30px;">
@@ -251,7 +283,7 @@
         const auth = firebase.auth();
         const db = firebase.database();
         const provider = new firebase.auth.GoogleAuthProvider();
-
+        
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
             .catch(err => console.error('Persistence error:', err));
 
@@ -346,7 +378,7 @@
         });
 
         function loadUserData() {
-            db.ref('users/' + currentUser.uid).on('value', snap => {
+                      db.ref('users/' + currentUser.uid).on('value', snap => {
                 userData = snap.val() || {};
                 const wallet = userData.wallet || { bonus: 0, deposited: 0 };
                 document.getElementById('bonusCash').textContent = wallet.bonus || 0;
@@ -354,6 +386,18 @@
                 const total = (wallet.bonus || 0) + (wallet.deposited || 0);
                 document.getElementById('totalBalance').textContent = total;
                 document.getElementById('totalWallet').textContent = total;
+
+                const setupSection = document.getElementById('upiSetupSection');
+                const withdrawSection = document.getElementById('withdrawFormSection');
+                const savedUpiDisplay = document.getElementById('savedUpiDisplay');
+                if (userData.upiId) {
+                    setupSection.classList.add('hidden');
+                    withdrawSection.classList.remove('hidden');
+                    savedUpiDisplay.textContent = userData.upiId;
+                } else {
+                    setupSection.classList.remove('hidden');
+                    withdrawSection.classList.add('hidden');
+                }
             });
         }
 
@@ -429,7 +473,7 @@
                     : `<span class="credential-mask">*************</span>`;
                 const roomPassDisplay = joined
                     ? `<span class="credential-reveal">${t.roomPassword || 'Not set'}</span>`
-                    : `<span class="credential-mask">*************</span>`;
+                                        : `<span class="credential-mask">*************</span>`;
 
                 html += `
                     <div class="tournament-card">
@@ -524,7 +568,7 @@
                 joinedAt: Date.now(),
                 status: 'joined',
                 inGameUid: inGameUid,
-                inGameName: inGameName.trim()
+                                inGameName: inGameName.trim()
             };
             updates['tournaments/' + tournamentId + '/participants/' + currentUser.uid] = {
                 name: userData.name,
@@ -549,7 +593,7 @@
         function loadMyTournaments() {
             const container = document.getElementById('myTournamentsList');
             if (!userData || !userData.joinedTournaments) {
-                container.innerHTML = '<div class="no-data">You haven\'t joined any tournaments yet</div>';
+                container.innerHTML = '<div class="no-data">You haven't joined any tournaments yet</div>';
                 return;
             }
             let html = '';
@@ -619,7 +663,7 @@
         function processTopup() {
             const custom = parseInt(document.getElementById('customAmount').value) || 0;
             const amount = selectedTopupAmount || custom;
-            const msgEl = document.getElementById('topupMsg');
+                        const msgEl = document.getElementById('topupMsg');
             if (amount < 10) {
                 msgEl.innerHTML = '<span class="error-msg">Minimum topup is ₹10</span>';
                 return;
@@ -653,26 +697,137 @@
                 .equalTo(currentUser.uid)
                 .limitToLast(50)
                 .on('value', snap => {
-                    const txs = snap.val() || {};
-                    const list = document.getElementById('transactionList');
-                    let html = '';
-                    Object.keys(txs)
-                        .sort((a, b) => txs[b].timestamp - txs[a].timestamp)
-                        .forEach(id => {
-                            const tx = txs[id];
-                            const color = tx.amount >= 0 ? '#2ecc71' : '#e94560';
-                            const sign = tx.amount >= 0 ? '+' : '';
-                            const date = new Date(tx.timestamp).toLocaleString();
-                            html += `<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #333;">
-                                <div>
-                                    <div style="font-weight:600;">${tx.description}</div>
-                                    <div style="font-size:12px;color:#666;">${date}</div>
-                                </div>
-                                <div style="color:${color};font-weight:bold;font-size:16px;">${sign}₹${Math.abs(tx.amount)}</div>
-                            </div>`;
-                        });
-                    list.innerHTML = html || '<div class="no-data">No transactions yet</div>';
+                    window.userTransactions = snap.val() || {};
+                    renderTransactionHistory();
                 });
+            loadWithdrawals();
+        }
+
+        function loadWithdrawals() {
+            db.ref('withdrawals')
+                .orderByChild('userId')
+                .equalTo(currentUser.uid)
+                .limitToLast(50)
+                .on('value', snap => {
+                    window.userWithdrawals = snap.val() || {};
+                    renderTransactionHistory();
+                });
+        }
+
+        function renderTransactionHistory() {
+            const list = document.getElementById('transactionList');
+            let items = [];
+
+            if (window.userTransactions) {
+                Object.keys(window.userTransactions).forEach(id => {
+                    const tx = window.userTransactions[id];
+                    items.push({
+                        type: 'tx',
+                        timestamp: tx.timestamp,
+                        description: tx.description,
+                        amount: tx.amount
+                    });
+                });
+            }
+
+            if (window.userWithdrawals) {
+                Object.keys(window.userWithdrawals).forEach(id => {
+                    const w = window.userWithdrawals[id];
+                    let desc = 'Withdrawal Request';
+                    if (w.status === 'pending') desc = 'Withdrawal Request (Pending)';
+                    if (w.status === 'approved') desc = 'Withdrawal Approved';
+                    if (w.status === 'rejected') desc = 'Withdrawal Rejected';
+                    items.push({
+                        type: 'withdraw',
+                        timestamp: w.requestedAt,
+                        description: desc + ' — ' + w.upiId,
+                        amount: -w.amount,
+                        status: w.status
+                    });
+                });
+            }
+
+            items.sort((a, b) => b.timestamp - a.timestamp);
+
+            let html = '';
+            items.forEach(item => {
+                const color = item.amount >= 0 ? '#2ecc71' : '#e94560';
+                const sign = item.amount >= 0 ? '+' : '';
+                const date = new Date(item.timestamp).toLocaleString();
+                let statusColor = color;
+                if (item.type === 'withdraw' && item.status === 'pending') statusColor = '#f39c12';
+                if (item.type === 'withdraw' && item.status === 'approved') statusColor = '#2ecc71';
+                if (item.type === 'withdraw' && item.status === 'rejected') statusColor = '#e74c3c';
+                                html += `<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #333;">
+                    <div>
+                        <div style="font-weight:600;">${item.description}</div>
+                        <div style="font-size:12px;color:#666;">${date}</div>
+                    </div>
+                    <div style="color:${statusColor};font-weight:bold;font-size:16px;">${sign}₹${Math.abs(item.amount)}</div>
+                </div>`;
+            });
+
+            list.innerHTML = html || '<div class="no-data">No transactions yet</div>';
+        }
+
+        function saveUpiId() {
+            const upiId = document.getElementById('setupUpiId').value.trim();
+            const msgEl = document.getElementById('upiSetupMsg');
+            if (!upiId) {
+                msgEl.innerHTML = '<span class="error-msg">Enter UPI ID or Phone Number</span>';
+                return;
+            }
+            if (upiId.length < 6) {
+                msgEl.innerHTML = '<span class="error-msg">Too short. Enter a valid UPI ID or Phone Number.</span>';
+                return;
+            }
+            db.ref('users/' + currentUser.uid + '/upiId').set(upiId)
+                .then(() => {
+                    msgEl.innerHTML = '<span class="success-msg">UPI ID saved successfully!</span>';
+                })
+                .catch(err => {
+                    msgEl.innerHTML = '<span class="error-msg">' + err.message + '</span>';
+                });
+        }
+
+        function requestWithdrawal() {
+            const amount = parseInt(document.getElementById('withdrawAmount').value) || 0;
+            const msgEl = document.getElementById('withdrawMsg');
+
+            if (!userData.upiId) {
+                msgEl.innerHTML = '<span class="error-msg">Please set your UPI ID first.</span>';
+                return;
+            }
+            if (amount < 200) {
+                msgEl.innerHTML = '<span class="error-msg">Minimum withdrawal is ₹200</span>';
+                return;
+            }
+
+            const wallet = userData.wallet || { bonus: 0, deposited: 0 };
+            const total = (wallet.bonus || 0) + (wallet.deposited || 0);
+            if (total < amount) {
+                msgEl.innerHTML = '<span class="error-msg">Insufficient balance</span>';
+                return;
+            }
+
+            if (!confirm('Request withdrawal of ₹' + amount + ' to ' + userData.upiId + '?')) return;
+
+            const withdrawId = db.ref().push().key;
+            db.ref('withdrawals/' + withdrawId).set({
+                userId: currentUser.uid,
+                userName: userData.name || '',
+                userEmail: currentUser.email || '',
+                upiId: userData.upiId,
+                amount: amount,
+                status: 'pending',
+                requestedAt: Date.now()
+            }).then(() => {
+                msgEl.innerHTML = '<span class="success-msg">Withdrawal request sent! Admin will process it soon.</span>';
+                document.getElementById('withdrawAmount').value = '';
+                renderTransactionHistory();
+            }).catch(err => {
+                msgEl.innerHTML = '<span class="error-msg">' + err.message + '</span>';
+            });
         }
 
         function showSection(section) {
@@ -695,4 +850,3 @@
     </script>
 </body>
 </html>
-
