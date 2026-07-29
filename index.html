@@ -453,17 +453,19 @@
     </div>
     <!-- ─── MAIN APP ──────────────────────────────────────────────────── -->
 <div id="mainApp" class="hidden">
- <div class="topbar">
-    <div class="logo" style="display:flex; flex-direction:column; align-items:flex-start; line-height:1.2;">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <!-- Replace src with your logo URL -->
-            <img src="https://raw.githubusercontent.com/vinnu-yadav/Khiladi/refs/heads/main/Arena%20X.jpg"  style="height:50px; width:auto; display:block;">
-            <span style="font-size:22px; font-weight:bold; color:#e94560;">Arena X</span>
+<div id="mainApp" class="hidden">
+    <div class="topbar">
+        <div class="logo" style="display:flex; flex-direction:column; align-items:flex-start; line-height:1.2;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <!-- Logo in a CIRCLE shape -->
+                <img src="https://raw.githubusercontent.com/vinnu-yadav/Khiladi/refs/heads/main/Arena%20X.jpg"
+                style="height:50px; width:50px; display:block; border-radius:50%; object-fit:cover; border:2px solid #e94560;">
+                <span style="font-size:22px; font-weight:bold; color:#e94560;">Arena X</span>
+            </div>
+            <span style="font-size:13px; color:#aaa; padding-left:46px;">First step to Esports</span>
         </div>
-        <span style="font-size:13px; color:#aaa; padding-left:46px;">First step to Esports</span>
+        <div class="wallet-badge">🪙 ₹<span id="totalWallet">0</span></div>
     </div>
-    <div class="wallet-badge">🪙 ₹<span id="totalWallet">0</span></div>
-</div>
     <div class="container">
         <!-- Tournaments Section -->
         <div id="tournamentsSection">
