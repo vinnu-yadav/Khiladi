@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel — Tournament Arena</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: #0f0f1a;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #1a1a2e;
+            border-bottom: 2px solid #e94560;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e94560;
+        }
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .nav-links button {
+            background: #16213e;
+            color: white;
+            border: 1px solid #333;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links button:hover,
+        .nav-links button.active {
+            background: #e94560;
+            border-color: #e94560;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .auth-box {
+            max-width: 400px;
+            margin: 80px auto;
+            background: #1a1a2e;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+        .auth-box h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #e94560;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            background: #0f0f1a;
+            color: #fff;
+            border-radius: 6px;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #e94560;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .btn {
+            padding: 12px 24px;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #c73e54;
+        }
+        .btn-secondary {
+            background: #16213e;
+            border: 1px solid #333;
+        }
+        .btn-secondary:hover {
+    background: #1f2d47;
+}
+.btn-success {
+    background: #2ecc71;
+}
+.btn-success:hover {
+    background: #27ae60;
+}
+.btn-danger {
+    background: #e74c3c;
+}
+.btn-danger:hover {
+    background: #c0392b;
+}
+.btn-warning {
+    background: #f39c12;
+    color: #000;
+}
+.btn-warning:hover {
+    background: #e67e22;
+}
+.hidden {
+    display: none !important;
+}
+.section-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #e94560;
+    border-left: 4px solid #e94560;
+    padding-left: 15px;
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    background: #1a1a2e;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    text-align: center;
+}
+.stat-card h3 {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+.stat-card .number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #e94560;
+}
+.card {
+    background: #1a1a2e;
+    border-radius: 12px;
+    border: 1px solid #333;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+.card h3 {
+    color: #e94560;
+    margin-bottom: 15px;
+}
+.table-wrap {
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th,
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+th {
+    background: #16213e;
+    color: #e94560;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+tr:hover {
+    background: rgba(233, 69, 96, 0.05);
+}
+.actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.actions button {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+}
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+.status-upcoming {
+    background: #3498db;
+}
+.status-live {
+    background: #2ecc71;
+}
+.status-completed {
+    background: #7f8c8d;
+}
+.type-badge {
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+    background: #9b59b6;
+    color: #fff;
+}
+.type-badge.solo {
+    background: #3498db;
+}
+.type-badge.squad {
+    background: #e67e22;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal {
+    background: #1a1a2e;
+                border-radius: 12px;
+            border: 1px solid #333;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-header h2 {
+            color: #e94560;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #e94560;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .game-card {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .game-card h4 {
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .game-card p {
+            color: #888;
+            font-size: 13px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .participants-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .participant-item {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+        .toast.error {
+            background: #e74c3c;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0f0f1a;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #loadingScreen div {
+            color: #e94560;
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .player-detail {
+            font-size: 13px;
+            color: #aaa;
+            margin: 2px 0;
+        }
+        .player-detail strong {
+            color: #fff;
+        }
+        .squad-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .squad-player {
+            background: #0f0f1a;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            font-size: 13px;
+        }
+        .squad-player .label {
+            color: #888;
+            font-size: 11px;
+        }
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .nav-links {
+                gap: 6px;
+            }
+            .nav-links button {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+            .squad-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingScreen" class="hidden"><div>⏳ Checking Admin Access...</div></div>
+    <!-- ─── AUTH SCREEN ───────────────────────────────────────────────── -->
+<div id="authScreen">
+    <div class="auth-box">
+        <h2>🔐 Admin Login</h2>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="adminEmail" placeholder="admin@example.com" />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="adminPassword" placeholder="Enter password" />
+        </div>
+        <div id="authError" style="color:#e94560;margin-bottom:10px;font-size:13px;min-height:18px;"></div>
+        <button class="btn" style="width:100%;" onclick="adminLogin()">Login</button>
+    </div>
+</div>
+
+<!-- ─── MAIN APP ─────────────────────────────────────────────────── -->
+<div id="mainApp" class="hidden">
+    <div class="navbar">
+        <div class="logo">⚙️ Admin Panel</div>
+        <div class="nav-links">
+            <button onclick="showSection('dashboard')" class="active" id="nav-dashboard">Dashboard</button>
+            <button onclick="showSection('games')" id="nav-games">Games</button>
+            <button onclick="showSection('tournaments')" id="nav-tournaments">Tournaments</button>
+            <button onclick="showSection('users')" id="nav-users">Users</button>
+            <button onclick="showSection('withdrawals')" id="nav-withdrawals">Withdrawals</button>
+            <button onclick="adminLogout()">Logout</button>
+        </div>
+    </div>
+    <div class="container">
+        <!-- DASHBOARD -->
+        <div id="dashboardSection">
+            <h2 class="section-title">Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card"><h3>Total Users</h3><div class="number" id="statUsers">0</div></div>
+                <div class="stat-card"><h3>Total Tournaments</h3><div class="number" id="statTournaments">0</div></div>
+                <div class="stat-card"><h3>Active</h3><div class="number" id="statActive">0</div></div>
+                <div class="stat-card"><h3>Completed</h3><div class="number" id="statCompleted">0</div></div>
+                <div class="stat-card"><h3>Total Games</h3><div class="number" id="statGames">0</div></div>
+                <div class="stat-card"><h3>Revenue</h3><div class="number" id="statRevenue">₹0</div></div>
+                <div class="stat-card"><h3>Pending Withdrawals</h3><div class="number" id="statPendingWithdrawals" style="color:#f39c12;">0</div></div>
+            </div>
+        </div>
+
+        <!-- GAMES -->
+        <div id="gamesSection" class="hidden">
+            <h2 class="section-title">Games Management</h2>
+            <div class="card">
+                <h3>Add New Game</h3>
+                <div class="form-row">
+                    <div class="form-group"><label>Game Name</label><input type="text" id="gameName" placeholder="e.g., Free Fire, BGMI" /></div>
+                    <div class="form-group"><label>Image URL</label><input type="text" id="gameImage" placeholder="https://..." /></div>
+                </div>
+                <div class="form-group"><label>Description</label><textarea id="gameDesc" placeholder="Short description..."></textarea></div>
+                <button class="btn" onclick="addGame()">➕ Add Game</button>
+            </div>
+            <div class="card"><h3>All Games</h3><div id="gamesList"><div class="empty-state">Loading games...</div></div></div>
+        </div>
+
+        <!-- TOURNAMENTS -->
+        <div id="tournamentsSection" class="hidden">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;">
+                <h2 class="section-title" style="margin:0;">Tournaments</h2>
+                <button class="btn btn-success" onclick="openTournamentModal()">➕ Add Tournament</button>
+            </div>
+            <div class="card" style="margin-top:20px;">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Game</th><th>Type</th><th>Fee</th><th>Prize</th><th>Date</th><th>Players</th><th>Status</th><th>Room</th><th>Actions</th></tr></thead>
+                        <tbody id="tournamentsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+                <!-- USERS -->
+        <div id="usersSection" class="hidden">
+            <h2 class="section-title">All Users</h2>
+            <div class="card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Wallet (Bonus)</th><th>Wallet (Deposited)</th><th>Joined</th><th>Registered</th></tr></thead>
+                        <tbody id="usersTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- WITHDRAWALS -->
+        <div id="withdrawalsSection" class="hidden">
+            <h2 class="section-title">Withdrawal Orders</h2>
+            <div class="card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>User</th><th>Email</th><th>UPI ID</th><th>Amount</th><th>Requested</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="withdrawalsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ─── TOURNAMENT MODAL ────────────────────────────────────────── -->
+<div id="tournamentModal" class="hidden">
+    <div class="modal-overlay" onclick="if(event.target===this)closeTournamentModal()">
+        <div class="modal">
+            <div class="modal-header"><h2 id="modalTitle">Add Tournament</h2><button class="close-btn" onclick="closeTournamentModal()">&times;</button></div>
+            <input type="hidden" id="editTournamentId" />
+            <div class="form-row">
+                <div class="form-group"><label>Tournament Name</label><input type="text" id="tName" placeholder="e.g., Sunday Showdown" /></div>
+                <div class="form-group"><label>Select Game</label><select id="tGame"><option value="">-- Select --</option></select></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Tournament Type</label>
+                    <select id="tType">
+                        <option value="solo">🎯 Solo (1 player per user)</option>
+                        <option value="squad">👥 Squad (4 players per user)</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Max Players / Squads</label>
+                    <input type="number" id="tMaxPlayers" placeholder="100" min="1" value="100" />
+                    <small style="color:#888;font-size:11px;">Solo = players, Squad = squads</small>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Entry Fee (₹)</label><input type="number" id="tEntryFee" placeholder="0" min="0" /></div>
+                <div class="form-group"><label>Prize Pool (₹)</label><input type="number" id="tPrizePool" placeholder="0" min="0" /></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Date & Time</label><input type="datetime-local" id="tDateTime" /></div>
+                <div class="form-group"><label>Status</label>
+                    <select id="tStatus"><option value="upcoming">Upcoming</option><option value="live">Live</option><option value="completed">Completed</option></select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Room UID (Numeric)</label><input type="number" id="tRoomUid" placeholder="12345678" /></div>
+                <div class="form-group"><label>Room Password</label><input type="text" id="tRoomPassword" placeholder="abc123" /></div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px;">
+                <button class="btn btn-secondary" onclick="closeTournamentModal()">Cancel</button>
+                <button class="btn" onclick="saveTournament()">Save Tournament</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ─── PARTICIPANTS MODAL ──────────────────────────────────────── -->
+<div id="participantsModal" class="hidden">
+    <div class="modal-overlay" onclick="if(event.target===this)closeParticipantsModal()">
+        <div class="modal">
+            <div class="modal-header"><h2>Tournament Participants</h2><button class="close-btn" onclick="closeParticipantsModal()">&times;</button></div>
+            <div id="participantsList" class="participants-list"></div>
+        </div>
+    </div>
+</div>
+<script>
+    // ─── FIREBASE INIT ──────────────────────────────────────────────
+    const firebaseConfig = {
+        apiKey: "AIzaSyBwqjgRRtZC9RJ34m-g5r0TBOx4G7AMDjc",
+        authDomain: "tournament-a7659.firebaseapp.com",
+        databaseURL: "https://tournament-a7659-default-rtdb.firebaseio.com",
+        projectId: "tournament-a7659",
+        storageBucket: "tournament-a7659.firebasestorage.app",
+        messagingSenderId: "458496922243",
+        appId: "1:458496922243:web:2aeb4b04bc9676e44a01b6",
+        measurementId: "G-FK9L8N9WSD"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    let allGames = {},
+        allTournaments = {},
+        allUsers = {};
+
+    // ─── AUTH ──────────────────────────────────────────────────────
+    function adminLogin() {
+        const email = document.getElementById('adminEmail').value.trim();
+        const password = document.getElementById('adminPassword').value;
+        const errEl = document.getElementById('authError');
+        if (!email || !password) { errEl.textContent = 'Fill all fields'; return; }
+        auth.signInWithEmailAndPassword(email, password)
+            .then(() => { errEl.textContent = ''; })
+            .catch(err => { errEl.textContent = err.message; });
+    }
+
+    function adminLogout() { auth.signOut(); }
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            document.getElementById('loadingScreen').classList.remove('hidden');
+            db.ref('users/' + user.uid + '/role').once('value')
+                .then(snap => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    if (snap.val() === 'admin') {
+                        document.getElementById('authScreen').classList.add('hidden');
+                        document.getElementById('mainApp').classList.remove('hidden');
+                        loadDashboard();
+                        loadGames();
+                        loadTournaments();
+                        loadUsers();
+                        loadWithdrawals();
+                    } else {
+                        auth.signOut();
+                        document.getElementById('authError').textContent = 'Access Denied: Not an admin.';
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    auth.signOut();
+                    document.getElementById('authError').textContent = 'Permission check failed.';
+                });
+        } else {
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+    });
+
+    function showSection(section) {
+        ['dashboard', 'games', 'tournaments', 'users', 'withdrawals'].forEach(s => {
+            document.getElementById(s + 'Section').classList.add('hidden');
+            document.getElementById('nav-' + s).classList.remove('active');
+        });
+        document.getElementById(section + 'Section').classList.remove('hidden');
+        document.getElementById('nav-' + section).classList.add('active');
+    }
+
+    // ─── DASHBOARD ──────────────────────────────────────────────────
+    function loadDashboard() {
+        db.ref('users').on('value', snap => { allUsers = snap.val() || {};
+            document.getElementById('statUsers').textContent = Object.keys(allUsers).length; });
+        db.ref('tournaments').on('value', snap => {
+            allTournaments = snap.val() || {};
+            const keys = Object.keys(allTournaments);
+            document.getElementById('statTournaments').textContent = keys.length;
+            document.getElementById('statActive').textContent = keys.filter(k => allTournaments[k].status !== 'completed')
+                .length;
+            document.getElementById('statCompleted').textContent = keys.filter(k => allTournaments[k].status === 'completed')
+                .length;
+        });
+        db.ref('games').on('value', snap => { allGames = snap.val() || {};
+            document.getElementById('statGames').textContent = Object.keys(allGames).length; });
+        db.ref('transactions').on('value', snap => {
+            const txs = snap.val() || {};
+            let revenue = 0;
+            Object.values(txs).forEach(tx => { if (tx.type === 'topup' && tx.amount > 0) revenue += tx.amount; });
+            document.getElementById('statRevenue').textContent = '₹' + revenue;
+        });
+        db.ref('withdrawals').on('value', snap => {
+            const wds = snap.val() || {};
+            const pending = Object.values(wds).filter(w => w.status === 'pending').length;
+            document.getElementById('statPendingWithdrawals').textContent = pending;
+        });
+    }
+    // ─── GAMES ──────────────────────────────────────────────────────
+function loadGames() {
+    db.ref('games').on('value', snap => {
+        allGames = snap.val() || {};
+        const list = document.getElementById('gamesList');
+        let html = '';
+        Object.keys(allGames).forEach(id => {
+            const g = allGames[id];
+            html += `<div class="game-card"><div><h4>${g.name}</h4><p>${g.description || 'No description'}</p></div><button class="btn btn-danger" onclick="deleteGame('${id}')">Delete</button></div>`;
+        });
+        list.innerHTML = html || '<div class="empty-state">No games added yet</div>';
+        const select = document.getElementById('tGame');
+        let opts = '<option value="">-- Select --</option>';
+        Object.keys(allGames).forEach(id => { opts += `<option value="${allGames[id].name}">${allGames[id].name}</option>`; });
+        select.innerHTML = opts;
+    });
+}
+
+function addGame() {
+    const name = document.getElementById('gameName').value.trim();
+    const image = document.getElementById('gameImage').value.trim();
+    const desc = document.getElementById('gameDesc').value.trim();
+    if (!name) { showToast('Game name is required', true); return; }
+    const id = db.ref().push().key;
+    db.ref('games/' + id).set({ name, image: image || '', description: desc || '', createdAt: Date.now() })
+        .then(() => { showToast('Game added successfully');
+            document.getElementById('gameName').value = '';
+            document.getElementById('gameImage').value = '';
+            document.getElementById('gameDesc').value = ''; })
+        .catch(err => showToast(err.message, true));
+}
+
+function deleteGame(id) { if (!confirm('Delete this game?')) return;
+    db.ref('games/' + id).remove().then(() => showToast('Game deleted')).catch(err => showToast(err.message, true)); }
+
+// ─── TOURNAMENTS ────────────────────────────────────────────────
+function loadTournaments() {
+    db.ref('tournaments').on('value', snap => {
+        allTournaments = snap.val() || {};
+        const tbody = document.getElementById('tournamentsTable');
+        let html = '';
+        const keys = Object.keys(allTournaments).sort((a, b) => (allTournaments[b].createdAt || 0) - (allTournaments[a].createdAt || 0));
+        keys.forEach(id => {
+            const t = allTournaments[id];
+            // Count individual players (1 per solo, 4 per squad)
+let pCount = 0;
+const participants = t.participants || {};
+Object.values(participants).forEach(p => {
+    if (t.type === 'squad' && p.players) {
+        pCount += p.players.length;  // each squad has 4 players
+    } else {
+        pCount += 1;
+    }
+});
+            const statusClass = 'status-' + (t.status || 'upcoming');
+            const hasCreds = t.roomUid && t.roomPassword ? '🔐' : '—';
+            const typeLabel = t.type === 'solo' ? '<span class="type-badge solo">Solo</span>' :
+                t.type === 'squad' ? '<span class="type-badge squad">Squad</span>' : '—';
+            html += `<tr>
+                <td><strong>${t.name}</strong></td>
+                <td>${t.game || '-'}</td>
+                <td>${typeLabel}</td>
+                <td>₹${t.entryFee || 0}</td>
+                <td>₹${t.prizePool || 0}</td>
+                <td>${t.dateTime || '-'}</td>
+                <td>${pCount}/${t.maxPlayers || 100}</td>
+                <td><span class="status-badge ${statusClass}">${t.status || 'upcoming'}</span></td>
+                <td style="text-align:center;font-size:16px;" title="${t.roomUid && t.roomPassword ? 'Room creds set' : 'No room creds'}">${hasCreds}</td>
+                <td class="actions">
+                    <button class="btn-success" onclick="viewParticipants('${id}')">👥</button>
+                    <button class="btn-warning" onclick="editTournament('${id}')">✏️</button>
+                    <button class="btn-secondary" onclick="markCompleted('${id}')">✓</button>
+                    <button class="btn-danger" onclick="deleteTournament('${id}')">🗑️</button>
+                </td>
+            </tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="10" style="text-align:center;color:#666;">No tournaments yet</td></tr>';
+    });
+}
+
+function openTournamentModal() {
+    document.getElementById('modalTitle').textContent = 'Add Tournament';
+    document.getElementById('editTournamentId').value = '';
+    document.getElementById('tName').value = '';
+    document.getElementById('tGame').value = '';
+    document.getElementById('tType').value = 'solo';
+    document.getElementById('tEntryFee').value = '';
+    document.getElementById('tPrizePool').value = '';
+    document.getElementById('tMaxPlayers').value = '100';
+    document.getElementById('tDateTime').value = '';
+    document.getElementById('tStatus').value = 'upcoming';
+    document.getElementById('tRoomUid').value = '';
+    document.getElementById('tRoomPassword').value = '';
+    document.getElementById('tournamentModal').classList.remove('hidden');
+}
+
+function closeTournamentModal() { document.getElementById('tournamentModal').classList.add('hidden'); }
+function saveTournament() {
+    const editId = document.getElementById('editTournamentId').value;
+    const name = document.getElementById('tName').value.trim();
+    const game = document.getElementById('tGame').value;
+    const type = document.getElementById('tType').value;
+    const entryFee = parseInt(document.getElementById('tEntryFee').value) || 0;
+    const prizePool = parseInt(document.getElementById('tPrizePool').value) || 0;
+    const maxPlayers = parseInt(document.getElementById('tMaxPlayers').value) || 100;
+    const dateTime = document.getElementById('tDateTime').value;
+    const status = document.getElementById('tStatus').value;
+    if (!name || !game) { showToast('Name and Game are required', true); return; }
+    const roomUid = document.getElementById('tRoomUid').value.trim();
+    const roomPassword = document.getElementById('tRoomPassword').value.trim();
+    const data = { name, game, type, entryFee, prizePool, maxPlayers, dateTime, status, updatedAt: Date.now(),
+        roomUid: roomUid ? parseInt(roomUid) : null, roomPassword: roomPassword || null };
+    if (editId) {
+        db.ref('tournaments/' + editId).update(data)
+            .then(() => { showToast('Tournament updated');
+                closeTournamentModal(); })
+            .catch(err => showToast(err.message, true));
+    } else {
+        data.createdAt = Date.now();
+        data.participants = {};
+        const id = db.ref().push().key;
+        db.ref('tournaments/' + id).set(data)
+            .then(() => { showToast('Tournament created');
+                closeTournamentModal(); })
+            .catch(err => showToast(err.message, true));
+    }
+}
+
+function editTournament(id) {
+    const t = allTournaments[id];
+    if (!t) return;
+    document.getElementById('modalTitle').textContent = 'Edit Tournament';
+    document.getElementById('editTournamentId').value = id;
+    document.getElementById('tName').value = t.name || '';
+    document.getElementById('tGame').value = t.game || '';
+    document.getElementById('tType').value = t.type || 'solo';
+    document.getElementById('tEntryFee').value = t.entryFee || 0;
+    document.getElementById('tPrizePool').value = t.prizePool || 0;
+    document.getElementById('tMaxPlayers').value = t.maxPlayers || 100;
+    document.getElementById('tDateTime').value = t.dateTime || '';
+    document.getElementById('tStatus').value = t.status || 'upcoming';
+    document.getElementById('tRoomUid').value = t.roomUid || '';
+    document.getElementById('tRoomPassword').value = t.roomPassword || '';
+    document.getElementById('tournamentModal').classList.remove('hidden');
+}
+
+function deleteTournament(id) { if (!confirm('Delete this tournament?')) return;
+    db.ref('tournaments/' + id).remove().then(() => showToast('Tournament deleted')).catch(err => showToast(err.message, true)); }
+
+function markCompleted(id) { if (!confirm('Mark as completed?')) return;
+    db.ref('tournaments/' + id).update({ status: 'completed', completedAt: Date.now() })
+        .then(() => showToast('Marked as completed')).catch(err => showToast(err.message, true)); }
+
+function viewParticipants(id) {
+    const t = allTournaments[id];
+    if (!t) return;
+    const list = document.getElementById('participantsList');
+    const parts = t.participants || {};
+    let html = '<table style="width:100%;border-collapse:collapse;"><thead><tr><th style="text-align:left;padding:10px;border-bottom:1px solid #333;color:#e94560;">User</th><th style="text-align:left;padding:10px;border-bottom:1px solid #333;color:#e94560;">Details</th></tr></thead><tbody>';
+    Object.keys(parts).forEach(uid => {
+        const p = parts[uid];
+        let detailHtml = '';
+        if (t.type === 'solo') {
+            detailHtml = `<div class="player-detail"><strong>UID:</strong> ${p.inGameUid || '-'}</div>
+                          <div class="player-detail"><strong>Name:</strong> ${p.inGameName || '-'}</div>`;
+        } else if (t.type === 'squad') {
+            // squad: we expect p.players to be an array of 4 objects
+            const players = p.players || [];
+            detailHtml = '<div class="squad-grid">';
+            for (let i = 0; i < 4; i++) {
+                const pl = players[i] || {};
+                detailHtml += `<div class="squad-player"><span class="label">P${i+1}</span> ${pl.name || '-'} (${pl.uid || '-'})</div>`;
+            }
+            detailHtml += '</div>';
+        }
+        html += `<tr><td style="padding:10px;border-bottom:1px solid #333;">${p.name || 'Unknown'}</td><td style="padding:10px;border-bottom:1px solid #333;">${detailHtml}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    list.innerHTML = html || '<div class="empty-state">No participants yet</div>';
+    document.getElementById('participantsModal').classList.remove('hidden');
+}
+
+function closeParticipantsModal() { document.getElementById('participantsModal').classList.add('hidden'); }
+        // ─── USERS ──────────────────────────────────────────────────────
+        function loadUsers() {
+            db.ref('users').on('value', snap => {
+                allUsers = snap.val() || {};
+                const tbody = document.getElementById('usersTable');
+                let html = '';
+                Object.keys(allUsers).forEach(id => {
+                    const u = allUsers[id];
+                    const w = u.wallet || { bonus: 0, deposited: 0 };
+                    const joined = u.joinedTournaments ? Object.keys(u.joinedTournaments).length : 0;
+                    const roleBadge = u.role === 'admin' ? '<span style="color:#f39c12;font-weight:bold;">ADMIN</span>' : 'User';
+                    html += `<tr><td>${u.name || '-'}</td><td>${u.email || '-'}</td><td>${roleBadge}</td><td>₹${w.bonus || 0}</td><td>₹${w.deposited || 0}</td><td>${joined}</td><td>${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</td></tr>`;
+                });
+                tbody.innerHTML = html || '<tr><td colspan="7" style="text-align:center;color:#666;">No users yet</td></tr>';
+            });
+        }
+
+        // ─── WITHDRAWALS ────────────────────────────────────────────────
+        function loadWithdrawals() {
+            db.ref('withdrawals').on('value', snap => {
+                const wds = snap.val() || {};
+                const tbody = document.getElementById('withdrawalsTable');
+                let html = '';
+                const keys = Object.keys(wds).sort((a, b) => (wds[b].requestedAt || 0) - (wds[a].requestedAt || 0));
+                keys.forEach(id => {
+                    const w = wds[id];
+                    let statusClass = 'status-upcoming';
+                    if (w.status === 'approved') statusClass = 'status-live';
+                    if (w.status === 'rejected') statusClass = 'status-completed';
+                    const actions = w.status === 'pending' ?
+                        `<button class="btn-success" onclick="approveWithdrawal('${id}')">Approve</button> <button class="btn-danger" onclick="rejectWithdrawal('${id}')">Reject</button>` :
+                        '<span style="color:#888;font-size:12px;">Processed</span>';
+                    html += `<tr>
+                        <td>${w.userName || '-'}</td>
+                        <td>${w.userEmail || '-'}</td>
+                        <td>${w.upiId || '-'}</td>
+                        <td>₹${w.amount || 0}</td>
+                        <td>${w.requestedAt ? new Date(w.requestedAt).toLocaleString() : '-'}</td>
+                        <td><span class="status-badge ${statusClass}">${w.status}</span></td>
+                        <td class="actions">${actions}</td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html || '<tr><td colspan="7" style="text-align:center;color:#666;">No withdrawal requests yet</td></tr>';
+            });
+        }
+
+        function approveWithdrawal(id) {
+            if (!confirm('Approve this withdrawal? Amount will be deducted from user wallet.')) return;
+            db.ref('withdrawals/' + id).once('value').then(snap => {
+                const w = snap.val();
+                if (!w || w.status !== 'pending') return;
+                return db.ref('users/' + w.userId + '/wallet').once('value').then(userSnap => {
+                    const wallet = userSnap.val() || { bonus: 0, deposited: 0 };
+                    let remaining = w.amount;
+                    let newBonus = wallet.bonus || 0;
+                    let newDeposited = wallet.deposited || 0;
+                    if (newDeposited >= remaining) {
+                        newDeposited -= remaining;
+                        remaining = 0;
+                    } else {
+                        remaining -= newDeposited;
+                        newDeposited = 0;
+                        newBonus -= remaining;
+                    }
+                    if (newBonus < 0) {
+                        showToast('User has insufficient balance to approve this withdrawal.', true);
+                        return Promise.reject('Insufficient balance');
+                    }
+                    const txId = db.ref().push().key;
+                    const updates = {};
+                    updates['users/' + w.userId + '/wallet'] = { bonus: newBonus, deposited: newDeposited };
+                    updates['withdrawals/' + id + '/status'] = 'approved';
+                    updates['withdrawals/' + id + '/processedAt'] = Date.now();
+                    updates['transactions/' + txId] = {
+                        userId: w.userId,
+                        userName: w.userName,
+                        amount: -w.amount,
+                        type: 'withdrawal',
+                        description: 'Withdrawal Approved — ' + w.upiId,
+                        timestamp: Date.now()
+                    };
+                    return db.ref().update(updates);
+                });
+            }).then(() => showToast('Withdrawal approved'))
+                .catch(err => { if (err !== 'Insufficient balance') showToast(err.message, true); });
+        }
+
+        function rejectWithdrawal(id) {
+            if (!confirm('Reject this withdrawal request?')) return;
+            db.ref('withdrawals/' + id).update({ status: 'rejected', processedAt: Date.now() })
+                .then(() => showToast('Withdrawal rejected'))
+                .catch(err => showToast(err.message, true));
+        }
+
+        function showToast(msg, isError) {
+            const t = document.createElement('div');
+            t.className = 'toast' + (isError ? ' error' : '');
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
