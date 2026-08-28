@@ -950,14 +950,49 @@
         }
 
         function onBannerClicked(encodedUrl) {
-            if (Math.abs(dragOffset) > 10) return;
-            const url = decodeURIComponent(encodedUrl);
-            if (url && url.trim().startsWith('http')) {
-                window.open(url, '_blank', 'noopener,noreferrer');
-            } else {
-                showSection('tournaments');
-            }
-        }
+    if (Math.abs(dragOffset) > 10) return;
+    const url = decodeURIComponent(encodedUrl).trim();
+
+    // 1. If empty, go to Tournaments home
+    if (!url || url === '') {
+        showSection('tournaments');
+        return;
+    }
+
+    // 2. If external link, open in new tab (e.g., Instagram, YouTube)
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+        return;
+    }
+
+    // 3. Directly open Game Modes (e.g., #game:Free Fire or #game:BGMI)
+    if (url.startsWith('#game:')) {
+        const gameName = url.replace('#game:', '').trim();
+        showSection('tournaments');
+        selectGame(gameName);
+        return;
+    }
+
+    // 4. Directly open specific Tournament Mode (e.g., #mode:Free Fire:1v1 or #mode:BGMI:tdm)
+    if (url.startsWith('#mode:')) {
+        const parts = url.replace('#mode:', '').split(':');
+        const gameName = parts[0]?.trim();
+        const modeType = parts[1]?.trim();
+        showSection('tournaments');
+        if (gameName) selectGame(gameName);
+        if (modeType) selectType(modeType);
+        return;
+    }
+
+    // 5. Open Bottom Navigation Tabs (#wallet, #myTournaments, #tournaments)
+    if (url === '#wallet') {
+        showSection('wallet');
+    } else if (url === '#myTournaments') {
+        showSection('myTournaments');
+    } else {
+        showSection('tournaments');
+    }
+}
 
         function updateSliderPosition(animate = true) {
             const track = document.getElementById('announcementSliderTrack');
