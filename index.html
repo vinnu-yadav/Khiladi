@@ -328,6 +328,57 @@
         .prize-pool { color: var(--gold); font-size: 15px; font-family: 'Orbitron', sans-serif; }
         .credential-reveal { color: var(--cyber-cyan); background: rgba(0, 243, 255, 0.1); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); font-weight: 800; }
         .credential-mask { color: #64748b; letter-spacing: 2px; font-family: monospace; font-weight: 800; }
+        
+        /* ─── TOURNAMENT SLOTS PROGRESS BAR ─── */
+        .slots-progressbar-wrap {
+            margin: 10px 0 6px;
+            background: rgba(10, 10, 25, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+        .slots-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+        .slots-progress-label {
+            color: var(--text-sub);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .slots-progress-count {
+            color: var(--cyber-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 11px;
+        }
+        .slots-progress-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .slots-progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--cyber-cyan), var(--primary-neon));
+            transition: width 0.4s ease;
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+        }
+        .slots-progress-bar.full {
+            background: linear-gradient(90deg, #ff4b2b, var(--primary-neon));
+            box-shadow: 0 0 8px rgba(233, 69, 96, 0.7);
+        }
+
         .card-footer { padding: 12px 16px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
         .btn-join { width: 100%; padding: 10px; background: var(--primary-neon); color: #fff; border: none; border-radius: 8px; font-family: 'Orbitron', sans-serif; cursor: pointer; }
         .btn-join:disabled { background: #1e293b; color: #7f8c8d; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.08); }
@@ -740,29 +791,29 @@
             document.getElementById('dashPlayerName').textContent = user.displayName || 'Gamer';
 
             db.ref('users/' + user.uid).on('value', snap => {
-    userData = snap.val() || {};
-    const bonus = userData.wallet?.bonus || 0;
-    const deposited = userData.wallet?.deposited || 0;
-    const total = bonus + deposited;
+                userData = snap.val() || {};
+                const bonus = userData.wallet?.bonus || 0;
+                const deposited = userData.wallet?.deposited || 0;
+                const total = bonus + deposited;
 
-    document.getElementById('bonusCash').textContent = bonus;
-    document.getElementById('depositedCash').textContent = deposited;
-    document.getElementById('totalBalance').textContent = total;
-    document.getElementById('totalWallet').textContent = total;
-    document.getElementById('dashTotalWallet').textContent = total;
-    document.getElementById('dashMatchesCount').textContent = userData.joinedTournaments ? Object.keys(userData.joinedTournaments).length : 0;
-    
-    // ✅ Updates the rank immediately in real time
-    document.getElementById('dashUserRank').textContent = userData.rank || '⚡ BRONZE';
+                document.getElementById('bonusCash').textContent = bonus;
+                document.getElementById('depositedCash').textContent = deposited;
+                document.getElementById('totalBalance').textContent = total;
+                document.getElementById('totalWallet').textContent = total;
+                document.getElementById('dashTotalWallet').textContent = total;
+                document.getElementById('dashMatchesCount').textContent = userData.joinedTournaments ? Object.keys(userData.joinedTournaments).length : 0;
+                
+                // ✅ Updates the rank immediately in real time
+                document.getElementById('dashUserRank').textContent = userData.rank || '⚡ BRONZE';
 
-    if (userData.upiId) {
-        document.getElementById('upiSetupSection').classList.add('hidden');
-        document.getElementById('withdrawFormSection').classList.remove('hidden');
-    } else {
-        document.getElementById('upiSetupSection').classList.remove('hidden');
-        document.getElementById('withdrawFormSection').classList.add('hidden');
-    }
-});
+                if (userData.upiId) {
+                    document.getElementById('upiSetupSection').classList.add('hidden');
+                    document.getElementById('withdrawFormSection').classList.remove('hidden');
+                } else {
+                    document.getElementById('upiSetupSection').classList.remove('hidden');
+                    document.getElementById('withdrawFormSection').classList.add('hidden');
+                }
+            });
 
             db.ref('tournaments').on('value', snap => {
                 allTournaments = snap.val() || {};
@@ -780,6 +831,17 @@
         function logout() { 
             showLoading('LOGGING OUT', 'Safely closing your session...');
             auth.signOut().then(() => location.reload()); 
+        }
+
+        // ─── HELPER: GET JOINED PARTICIPANTS COUNT ───
+        function getJoinedCount(t) {
+            if (!t || !t.participants) return 0;
+            let count = 0;
+            Object.values(t.participants).forEach(p => {
+                if (p.players && Array.isArray(p.players)) count += p.players.length;
+                else count += 1;
+            });
+            return count;
         }
 
         // ─── TOUCH / DRAG SLIDING BANNER LOGIC ───
@@ -953,49 +1015,44 @@
         }
 
         function onBannerClicked(encodedUrl) {
-    if (Math.abs(dragOffset) > 10) return;
-    const url = decodeURIComponent(encodedUrl).trim();
+            if (Math.abs(dragOffset) > 10) return;
+            const url = decodeURIComponent(encodedUrl).trim();
 
-    // 1. If empty, go to Tournaments home
-    if (!url || url === '') {
-        showSection('tournaments');
-        return;
-    }
+            if (!url || url === '') {
+                showSection('tournaments');
+                return;
+            }
 
-    // 2. If external link, open in new tab (e.g., Instagram, YouTube)
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-        window.open(url, '_blank', 'noopener,noreferrer');
-        return;
-    }
+            if (url.startsWith('http://') || url.startsWith('https://')) {
+                window.open(url, '_blank', 'noopener,noreferrer');
+                return;
+            }
 
-    // 3. Directly open Game Modes (e.g., #game:Free Fire or #game:BGMI)
-    if (url.startsWith('#game:')) {
-        const gameName = url.replace('#game:', '').trim();
-        showSection('tournaments');
-        selectGame(gameName);
-        return;
-    }
+            if (url.startsWith('#game:')) {
+                const gameName = url.replace('#game:', '').trim();
+                showSection('tournaments');
+                selectGame(gameName);
+                return;
+            }
 
-    // 4. Directly open specific Tournament Mode (e.g., #mode:Free Fire:1v1 or #mode:BGMI:tdm)
-    if (url.startsWith('#mode:')) {
-        const parts = url.replace('#mode:', '').split(':');
-        const gameName = parts[0]?.trim();
-        const modeType = parts[1]?.trim();
-        showSection('tournaments');
-        if (gameName) selectGame(gameName);
-        if (modeType) selectType(modeType);
-        return;
-    }
+            if (url.startsWith('#mode:')) {
+                const parts = url.replace('#mode:', '').split(':');
+                const gameName = parts[0]?.trim();
+                const modeType = parts[1]?.trim();
+                showSection('tournaments');
+                if (gameName) selectGame(gameName);
+                if (modeType) selectType(modeType);
+                return;
+            }
 
-    // 5. Open Bottom Navigation Tabs (#wallet, #myTournaments, #tournaments)
-    if (url === '#wallet') {
-        showSection('wallet');
-    } else if (url === '#myTournaments') {
-        showSection('myTournaments');
-    } else {
-        showSection('tournaments');
-    }
-}
+            if (url === '#wallet') {
+                showSection('wallet');
+            } else if (url === '#myTournaments') {
+                showSection('myTournaments');
+            } else {
+                showSection('tournaments');
+            }
+        }
 
         function updateSliderPosition(animate = true) {
             const track = document.getElementById('announcementSliderTrack');
@@ -1147,7 +1204,12 @@
 
             list.forEach(t => {
                 const joined = userData?.joinedTournaments && userData.joinedTournaments[t.id];
-                const canJoin = t.status === 'upcoming' && !joined;
+                const joinedCount = getJoinedCount(t);
+                const maxSlots = t.maxPlayers || 100;
+                const progressPct = Math.min(100, Math.round((joinedCount / maxSlots) * 100));
+                const isFull = joinedCount >= maxSlots;
+                const canJoin = t.status === 'upcoming' && !joined && !isFull;
+
                 html += `
                     <div class="tournament-card tilt-card">
                         <div class="card-header">
@@ -1159,11 +1221,24 @@
                             <div class="info-row"><span>Entry Fee</span><span>₹${t.entryFee || 0}</span></div>
                             <div class="info-row"><span>Date & Time</span><span>${t.dateTime || 'TBD'}</span></div>
                             <div class="info-row"><span>Status</span><span style="color:var(--green-live);">${t.status}</span></div>
-                            <div class="info-row"><span>Room ID</span>${joined ? `<span class="credential-reveal">${t.roomUid || 'Pending'}</span>` : `<span class="credential-mask">••••••••</span>`}</div>
+
+                            <!-- ─── SLOTS PROGRESS BAR ─── -->
+                            <div class="slots-progressbar-wrap">
+                                <div class="slots-progress-header">
+                                    <span class="slots-progress-label">👥 Joined Slots</span>
+                                    <span class="slots-progress-count">${joinedCount} / ${maxSlots} (${progressPct}%)</span>
+                                </div>
+                                <div class="slots-progress-track">
+                                    <div class="slots-progress-bar ${isFull ? 'full' : ''}" style="width: ${progressPct}%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="info-row" style="margin-top: 8px;"><span>Room ID</span>${joined ? `<span class="credential-reveal">${t.roomUid || 'Pending'}</span>` : `<span class="credential-mask">••••••••</span>`}</div>
                             <div class="info-row"><span>Password</span>${joined ? `<span class="credential-reveal">${t.roomPassword || 'Pending'}</span>` : `<span class="credential-mask">••••••••</span>`}</div>
                         </div>
                         <div class="card-footer">
                             ${joined ? '<button class="btn-join btn-joined" disabled>✅ Joined Already</button>' :
+                              isFull ? '<button class="btn-join" disabled>🚫 Slots Full</button>' :
                               canJoin ? `<button class="btn-join" onclick="openJoinModal('${t.id}')">Join Tournament</button>` :
                               '<button class="btn-join" disabled>Match Closed</button>'}
                         </div>
@@ -1180,6 +1255,13 @@
                 alert('You have already joined this tournament!');
                 return;
             }
+            const joinedCount = getJoinedCount(t);
+            const maxSlots = t.maxPlayers || 100;
+            if (joinedCount >= maxSlots) {
+                alert('This tournament is full! No slots remaining.');
+                return;
+            }
+
             const wallet = userData?.wallet || { bonus: 0, deposited: 0 };
             const total = (wallet.bonus || 0) + (wallet.deposited || 0);
 
@@ -1355,13 +1437,29 @@
                 const t = allTournaments[id];
                 if (!t) return;
                 const jt = userData.joinedTournaments[id];
+                const joinedCount = getJoinedCount(t);
+                const maxSlots = t.maxPlayers || 100;
+                const progressPct = Math.min(100, Math.round((joinedCount / maxSlots) * 100));
+
                 html += `
                     <div class="tournament-card tilt-card">
                         <div class="card-header"><h3>${t.name}</h3><span>${t.game}</span></div>
                         <div class="card-body">
                             <div class="info-row"><span>Prize Pool</span><span class="prize-pool">₹${t.prizePool}</span></div>
                             <div class="info-row"><span>Date & Time</span><span>${t.dateTime}</span></div>
-                            <div class="info-row"><span>Room ID</span><span class="credential-reveal">${t.roomUid || 'Not set'}</span></div>
+
+                            <!-- ─── SLOTS PROGRESS BAR ─── -->
+                            <div class="slots-progressbar-wrap">
+                                <div class="slots-progress-header">
+                                    <span class="slots-progress-label">👥 Joined Slots</span>
+                                    <span class="slots-progress-count">${joinedCount} / ${maxSlots} (${progressPct}%)</span>
+                                </div>
+                                <div class="slots-progress-track">
+                                    <div class="slots-progress-bar" style="width: ${progressPct}%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="info-row" style="margin-top: 8px;"><span>Room ID</span><span class="credential-reveal">${t.roomUid || 'Not set'}</span></div>
                             <div class="info-row"><span>Room Password</span><span class="credential-reveal">${t.roomPassword || 'Not set'}</span></div>
                             <div class="info-row"><span>IGN / UID</span><span>${jt.inGameName || '-'} (${jt.inGameUid || '-'})</span></div>
                         </div>
