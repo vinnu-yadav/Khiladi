@@ -740,26 +740,29 @@
             document.getElementById('dashPlayerName').textContent = user.displayName || 'Gamer';
 
             db.ref('users/' + user.uid).on('value', snap => {
-                userData = snap.val() || {};
-                const bonus = userData.wallet?.bonus || 0;
-                const deposited = userData.wallet?.deposited || 0;
-                const total = bonus + deposited;
+    userData = snap.val() || {};
+    const bonus = userData.wallet?.bonus || 0;
+    const deposited = userData.wallet?.deposited || 0;
+    const total = bonus + deposited;
 
-                document.getElementById('bonusCash').textContent = bonus;
-                document.getElementById('depositedCash').textContent = deposited;
-                document.getElementById('totalBalance').textContent = total;
-                document.getElementById('totalWallet').textContent = total;
-                document.getElementById('dashTotalWallet').textContent = total;
-                document.getElementById('dashMatchesCount').textContent = userData.joinedTournaments ? Object.keys(userData.joinedTournaments).length : 0;
+    document.getElementById('bonusCash').textContent = bonus;
+    document.getElementById('depositedCash').textContent = deposited;
+    document.getElementById('totalBalance').textContent = total;
+    document.getElementById('totalWallet').textContent = total;
+    document.getElementById('dashTotalWallet').textContent = total;
+    document.getElementById('dashMatchesCount').textContent = userData.joinedTournaments ? Object.keys(userData.joinedTournaments).length : 0;
+    
+    // ✅ Updates the rank immediately in real time
+    document.getElementById('dashUserRank').textContent = userData.rank || '⚡ BRONZE';
 
-                if (userData.upiId) {
-                    document.getElementById('upiSetupSection').classList.add('hidden');
-                    document.getElementById('withdrawFormSection').classList.remove('hidden');
-                } else {
-                    document.getElementById('upiSetupSection').classList.remove('hidden');
-                    document.getElementById('withdrawFormSection').classList.add('hidden');
-                }
-            });
+    if (userData.upiId) {
+        document.getElementById('upiSetupSection').classList.add('hidden');
+        document.getElementById('withdrawFormSection').classList.remove('hidden');
+    } else {
+        document.getElementById('upiSetupSection').classList.remove('hidden');
+        document.getElementById('withdrawFormSection').classList.add('hidden');
+    }
+});
 
             db.ref('tournaments').on('value', snap => {
                 allTournaments = snap.val() || {};
