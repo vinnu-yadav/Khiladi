@@ -234,10 +234,7 @@
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
-        .login-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        .login-overlay.active { opacity: 1; visibility: visible; }
 
         .login-loader-box {
             background: rgba(15, 15, 32, 0.95);
@@ -408,6 +405,8 @@
         .copy-chip { background: rgba(0, 243, 255, 0.15); color: var(--cyber-cyan); border: 1px solid var(--cyber-cyan); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; white-space: nowrap; margin-left: 8px; }
         .copy-chip:hover { background: var(--cyber-cyan); color: #000; }
         
+        .locked-badge { background: rgba(46, 204, 113, 0.12); color: var(--green-live); border: 1px solid rgba(46, 204, 113, 0.35); padding: 3px 8px; border-radius: 6px; font-size: 10.5px; display: inline-flex; align-items: center; gap: 4px; }
+
         .btn-logout { background: linear-gradient(135deg, #e94560, #c0392b); color: #fff; border: 1px solid #ff4b2b; padding: 12px; border-radius: 10px; font-family: 'Orbitron', sans-serif; font-weight: 800; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(233, 69, 96, 0.35); transition: 0.3s; }
         .btn-logout:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5); }
 
@@ -605,18 +604,29 @@
                         <button class="btn" onclick="window.open('https://www.instagram.com/_arena_x_?igsi=MWJlMDE2aDEwdjVmYw==','_blank')">Contact Admin to Top Up</button>
                     </div>
 
+                    <!-- UPI One-Time Linking Section (Only shown if UPI not yet saved) -->
                     <div id="upiSetupSection" class="topup-section tilt-card" style="border-color: #ff9900;">
                         <h3 style="text-align:center; color: #ff9900; font-size: 16px;">🔗 Link UPI ID for Withdrawal</h3>
+                        <p style="text-align:center; font-size:11px; color:var(--text-sub); margin-top:3px;">
+                            One-time setup: This UPI ID will be permanently locked to your account for all future winnings payouts.
+                        </p>
                         <div class="form-group" style="margin-top: 10px;">
                             <label>UPI ID or Phone Number</label>
                             <input type="text" id="setupUpiId" placeholder="username@upi or 9876543210" />
                         </div>
-                        <button class="btn" style="background: #ff9900; color: #000;" onclick="saveUpiId()">Save & Lock UPI ID</button>
+                        <button class="btn" style="background: #ff9900; color: #000;" onclick="saveUpiId()">Save & Permanently Lock UPI ID</button>
                         <div id="upiSetupMsg" style="margin-top:8px; text-align:center;"></div>
                     </div>
 
                     <div id="withdrawFormSection" class="topup-section tilt-card hidden" style="border-color: var(--green-live);">
                         <h3 style="text-align:center; color: var(--green-live); font-size: 16px;">💸 Instant Withdrawal</h3>
+                        <div style="background: rgba(10, 10, 24, 0.7); border: 1px solid rgba(46, 204, 113, 0.3); border-radius: 8px; padding: 10px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 10px; color: var(--text-sub); display: block;">Locked Withdrawal UPI ID</span>
+                                <span id="withdrawLockedUpi" style="font-size: 13px; color: #ff9900; font-family: monospace;">-</span>
+                            </div>
+                            <span class="locked-badge">🔒 Locked</span>
+                        </div>
                         <div class="form-group" style="margin-top: 10px;">
                             <label>Withdrawal Amount (₹)</label>
                             <input type="number" id="withdrawAmount" placeholder="Min. ₹200" min="200" />
@@ -637,7 +647,7 @@
                     <div id="myTournamentsList" class="tournament-grid"></div>
                 </div>
 
-                <!-- ─── ACCOUNT SECTION (REPLACES STANDALONE LOGOUT) ─── -->
+                <!-- ─── ACCOUNT SECTION (LOCKED UPI ID & SESSION) ─── -->
                 <div id="accountSection" class="hidden">
                     <h2 class="section-title">👤 My Account</h2>
 
@@ -656,21 +666,32 @@
                             </div>
                         </div>
 
-                        <!-- 2. Wallet UPI ID Card -->
+                        <!-- 2. Wallet UPI ID Card (LOCKED - NO UPDATE OPTION) -->
                         <div class="account-card tilt-card">
-                            <h3 style="color: #ff9900; font-size: 15px;">🔗 Wallet UPI ID</h3>
-                            <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">For Direct Tournament Winnings Payout</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 style="color: #ff9900; font-size: 15px;">🔗 Wallet UPI ID</h3>
+                                    <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">For Direct Tournament Winnings Payout</p>
+                                </div>
+                                <span id="accUpiLockedBadge" class="locked-badge">🔒 Locked</span>
+                            </div>
                             
                             <div class="account-field">
                                 <span class="val" id="accUpiId" style="color: #ff9900;">Not linked</span>
                             </div>
 
-                            <div style="margin-top: 10px;">
+                            <!-- If not yet set, allow one-time lock setup -->
+                            <div id="accUpiSetupBox" class="hidden" style="margin-top: 10px;">
                                 <div class="form-group" style="margin-bottom: 8px;">
-                                    <input type="text" id="accUpiInput" placeholder="Enter new UPI ID (e.g. name@upi)" style="font-size: 12px; padding: 8px 10px;" />
+                                    <input type="text" id="accUpiInput" placeholder="Enter UPI ID once (e.g. name@upi)" style="font-size: 12px; padding: 8px 10px;" />
                                 </div>
-                                <button class="btn" style="background: #ff9900; color: #000; padding: 8px; font-size: 12px;" onclick="saveAccountUpiId()">Update & Lock UPI ID</button>
+                                <button class="btn" style="background: #ff9900; color: #000; padding: 8px; font-size: 12px;" onclick="saveAccountUpiId()">Save & Permanently Lock</button>
                                 <div id="accUpiMsg" style="margin-top: 6px; text-align: center; font-size: 11px;"></div>
+                            </div>
+
+                            <div style="margin-top: 10px; font-size: 11px; color: var(--text-sub); display: flex; align-items: center; gap: 5px;">
+                                <span>🔒</span>
+                                <span>UPI ID is permanently locked to your profile for withdrawal security.</span>
                             </div>
                         </div>
 
@@ -989,13 +1010,16 @@
                 document.getElementById('accBonusCash').textContent = bonus;
                 document.getElementById('accDepositedCash').textContent = deposited;
 
-                const upiDisplay = userData.upiId || 'Not linked yet';
-                document.getElementById('accUpiId').textContent = upiDisplay;
+                // Locked UPI Logic: If UPI is linked, permanently disable editing
                 if (userData.upiId) {
-                    document.getElementById('accUpiInput').value = userData.upiId;
+                    document.getElementById('accUpiId').textContent = userData.upiId;
+                    document.getElementById('withdrawLockedUpi').textContent = userData.upiId;
+                    document.getElementById('accUpiSetupBox').classList.add('hidden');
                     document.getElementById('upiSetupSection').classList.add('hidden');
                     document.getElementById('withdrawFormSection').classList.remove('hidden');
                 } else {
+                    document.getElementById('accUpiId').textContent = 'Not linked yet';
+                    document.getElementById('accUpiSetupBox').classList.remove('hidden');
                     document.getElementById('upiSetupSection').classList.remove('hidden');
                     document.getElementById('withdrawFormSection').classList.add('hidden');
                 }
@@ -1022,7 +1046,17 @@
             }
         }
 
+        // One-time UPI Saver in Account section
         function saveAccountUpiId() {
+            if (userData?.upiId) {
+                showGraphicalModal({
+                    title: 'UPI ID IS LOCKED',
+                    message: 'Your UPI ID is permanently locked for account protection and cannot be modified.',
+                    type: 'warning',
+                    icon: '🔒'
+                });
+                return;
+            }
             const val = document.getElementById('accUpiInput').value.trim();
             const msgEl = document.getElementById('accUpiMsg');
             if (!val || val.length < 5) {
@@ -1030,9 +1064,31 @@
                 return;
             }
             db.ref('users/' + currentUser.uid + '/upiId').set(val).then(() => {
-                showGraphicalToast('UPI ID locked successfully!', '🔒');
-                msgEl.innerHTML = '<span class="success-msg">✅ UPI ID successfully updated and locked!</span>';
+                showGraphicalToast('UPI ID locked permanently!', '🔒');
+                msgEl.innerHTML = '<span class="success-msg">✅ UPI ID successfully locked!</span>';
                 setTimeout(() => { msgEl.innerHTML = ''; }, 3000);
+            });
+        }
+
+        // One-time UPI Saver in Wallet section
+        function saveUpiId() {
+            if (userData?.upiId) {
+                showGraphicalModal({
+                    title: 'UPI ID IS LOCKED',
+                    message: 'Your UPI ID is already linked and permanently locked to your account.',
+                    type: 'warning',
+                    icon: '🔒'
+                });
+                return;
+            }
+            const upiId = document.getElementById('setupUpiId').value.trim();
+            if (!upiId || upiId.length < 5) {
+                document.getElementById('upiSetupMsg').innerHTML = '<span class="error-msg">Enter a valid UPI ID</span>';
+                return;
+            }
+            db.ref('users/' + currentUser.uid + '/upiId').set(upiId).then(() => {
+                showGraphicalToast('UPI ID locked permanently!', '🔒');
+                document.getElementById('upiSetupMsg').innerHTML = '<span class="success-msg">✅ UPI ID Locked</span>';
             });
         }
 
@@ -1698,18 +1754,6 @@
             ev.target.classList.add('selected');
         }
 
-        function saveUpiId() {
-            const upiId = document.getElementById('setupUpiId').value.trim();
-            if (!upiId || upiId.length < 5) {
-                document.getElementById('upiSetupMsg').innerHTML = '<span class="error-msg">Enter a valid UPI ID</span>';
-                return;
-            }
-            db.ref('users/' + currentUser.uid + '/upiId').set(upiId).then(() => {
-                showGraphicalToast('UPI ID locked successfully!', '🔒');
-                document.getElementById('upiSetupMsg').innerHTML = '<span class="success-msg">✅ UPI ID Locked</span>';
-            });
-        }
-
         async function requestWithdrawal() {
             const amt = parseInt(document.getElementById('withdrawAmount').value) || 0;
             if (amt < 200) {
@@ -1745,7 +1789,7 @@
             await db.ref().update(updates);
             showGraphicalModal({
                 title: 'WITHDRAWAL SUBMITTED',
-                message: `💸 Your withdrawal request of ₹${amt} to UPI (${userData?.upiId}) has been submitted for admin approval.`,
+                message: `💸 Your withdrawal request of ₹${amt} to locked UPI (${userData?.upiId}) has been submitted for admin approval.`,
                 type: 'success',
                 icon: '✅'
             });
