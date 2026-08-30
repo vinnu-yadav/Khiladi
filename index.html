@@ -647,7 +647,7 @@
                     <div id="myTournamentsList" class="tournament-grid"></div>
                 </div>
 
-                <!-- ─── ACCOUNT SECTION (LOCKED UPI ID & SESSION) ─── -->
+                <!-- ─── ACCOUNT SECTION ─── -->
                 <div id="accountSection" class="hidden">
                     <h2 class="section-title">👤 My Account</h2>
 
@@ -666,7 +666,24 @@
                             </div>
                         </div>
 
-                        <!-- 2. Wallet UPI ID Card (LOCKED - NO UPDATE OPTION) -->
+                        <!-- 2. Instagram Profile Card (Same Design as Email) -->
+                        <div class="account-card tilt-card">
+                            <h3 style="color: #e1306c; font-size: 15px;">📸 Instagram Profile</h3>
+                            <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">Player Identification & Community</p>
+                            
+                            <div class="account-field">
+                                <span class="val" id="accInstagram" style="color: #e1306c;">loading...</span>
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <button class="copy-chip" onclick="copyInstagram()">Copy</button>
+                                    <button class="copy-chip" style="background: rgba(225, 48, 108, 0.2); border-color: #e1306c; color: #fff;" onclick="visitInstagram()">Visit ↗</button>
+                                </div>
+                            </div>
+                            <div style="margin-top: 8px; font-size: 11px; color: var(--green-live); display: flex; align-items: center; gap: 4px;">
+                                <span>✔</span> Verified & Protected
+                            </div>
+                        </div>
+
+                        <!-- 3. Wallet UPI ID Card (LOCKED - NO UPDATE OPTION) -->
                         <div class="account-card tilt-card">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div>
@@ -695,7 +712,7 @@
                             </div>
                         </div>
 
-                        <!-- 3. Wallet Balance Overview Card -->
+                        <!-- 4. Wallet Balance Overview Card -->
                         <div class="account-card tilt-card" style="border-color: var(--primary-neon);">
                             <h3 style="color: var(--primary-neon); font-size: 15px;">💰 Wallet Balance</h3>
                             <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">Total Available Funds</p>
@@ -724,7 +741,7 @@
                         </div>
                     </div>
 
-                    <!-- 4. Session & Logout Card -->
+                    <!-- 5. Session & Logout Card -->
                     <div class="tilt-card" style="padding: 20px; max-width: 480px; margin: 20px auto 0; text-align: center;">
                         <h3 style="color: #fff; font-size: 15px; margin-bottom: 6px;">🚪 Session Security</h3>
                         <p style="color: var(--text-sub); font-size: 11.5px; margin-bottom: 16px;">
@@ -1010,6 +1027,9 @@
                 document.getElementById('accBonusCash').textContent = bonus;
                 document.getElementById('accDepositedCash').textContent = deposited;
 
+                // Set Instagram Profile in Account card
+                document.getElementById('accInstagram').textContent = userData.instagramLink || 'Not linked';
+
                 // Locked UPI Logic: If UPI is linked, permanently disable editing
                 if (userData.upiId) {
                     document.getElementById('accUpiId').textContent = userData.upiId;
@@ -1043,6 +1063,24 @@
             if (email && email !== 'loading...') {
                 navigator.clipboard.writeText(email);
                 showGraphicalToast('Registered email copied!', '📋');
+            }
+        }
+
+        function copyInstagram() {
+            const insta = document.getElementById('accInstagram').textContent;
+            if (insta && insta !== 'loading...' && insta !== 'Not linked') {
+                navigator.clipboard.writeText(insta);
+                showGraphicalToast('Instagram profile URL copied!', '📋');
+            }
+        }
+
+        function visitInstagram() {
+            const insta = document.getElementById('accInstagram').textContent.trim();
+            if (insta && insta !== 'loading...' && insta !== 'Not linked') {
+                const url = insta.startsWith('http') ? insta : 'https://' + insta;
+                window.open(url, '_blank', 'noopener,noreferrer');
+            } else {
+                showGraphicalToast('No Instagram profile linked yet!', '⚠️');
             }
         }
 
