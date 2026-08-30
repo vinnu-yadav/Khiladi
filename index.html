@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/vinnu-yadav/Khiladi/refs/heads/main/arena.local.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@600;700;800&family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Firebase SDKs -->
@@ -34,7 +34,7 @@
         }
         html { font-size: 85%; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; font-weight: 700; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; padding-bottom: 75px; }
+        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; padding-bottom: 80px; }
 
         .stage-lighting { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .spotlight-tl { position: absolute; top: -150px; left: -150px; width: 550px; height: 550px; border-radius: 50%; background: radial-gradient(circle, rgba(233, 69, 96, 0.15) 0%, transparent 70%); filter: blur(80px); }
@@ -48,11 +48,175 @@
         h1, h2, h3, .logo-text { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; }
 
         .topbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: rgba(15, 15, 30, 0.88); backdrop-filter: blur(20px); border-bottom: 2px solid var(--primary-neon); position: sticky; top: 0; z-index: 100; }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--primary-neon); }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--primary-neon); cursor: pointer; }
         .logo img { height: 34px; filter: drop-shadow(0 0 8px var(--primary-neon)); }
 
         .wallet-badge { background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), rgba(0, 243, 255, 0.15)); padding: 7px 16px; border-radius: 20px; border: 1px solid var(--primary-neon); font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.3s; }
         .wallet-badge:hover { transform: scale(1.04); border-color: var(--cyber-cyan); }
+
+        /* ─── GRAPHICAL MODAL / DIALOG SYSTEM ─── */
+        .graphical-dialog-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(4, 4, 12, 0.86);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 16px;
+        }
+
+        .graphical-dialog-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .graphical-dialog-box {
+            background: linear-gradient(145deg, rgba(22, 22, 45, 0.98), rgba(12, 12, 28, 0.98));
+            border: 2px solid var(--primary-neon);
+            border-radius: 22px;
+            padding: 26px 22px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(233, 69, 96, 0.35);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graphical-dialog-overlay.active .graphical-dialog-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .dialog-icon-wrap {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 14px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: rgba(233, 69, 96, 0.15);
+            border: 1px solid var(--primary-neon);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .dialog-icon-wrap.confirm {
+            background: rgba(255, 75, 43, 0.15);
+            border-color: #ff4b2b;
+            color: #ff4b2b;
+            box-shadow: 0 0 20px rgba(255, 75, 43, 0.3);
+        }
+
+        .dialog-icon-wrap.success {
+            background: rgba(46, 204, 113, 0.15);
+            border-color: var(--green-live);
+            color: var(--green-live);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+        }
+
+        .dialog-icon-wrap.warning {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .dialog-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 17px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .dialog-desc {
+            font-size: 12.5px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .dialog-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dialog-actions button {
+            flex: 1;
+            padding: 11px;
+            border-radius: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s ease;
+        }
+
+        .dialog-btn-cancel {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-sub);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+
+        .dialog-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .dialog-btn-primary {
+            background: linear-gradient(135deg, var(--primary-neon), #ff4b2b);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+        }
+
+        .dialog-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+        }
+
+        .dialog-btn-cyan {
+            background: linear-gradient(135deg, var(--cyber-cyan), #00a8ff);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(0, 243, 255, 0.4);
+        }
+
+        /* ─── GRAPHICAL TOAST NOTIFICATION ─── */
+        .graphical-toast {
+            position: fixed;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-30px);
+            background: rgba(15, 15, 32, 0.95);
+            border: 1px solid var(--cyber-cyan);
+            border-radius: 12px;
+            padding: 10px 18px;
+            color: #fff;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 30px rgba(0, 243, 255, 0.35);
+            backdrop-filter: blur(16px);
+            z-index: 9999999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .graphical-toast.active {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
 
         /* ─── CYBER RADAR RING LOGIN OVERLAY ANIMATION ─── */
         .login-overlay {
@@ -116,15 +280,8 @@
             animation: spin-reverse 0.7s linear infinite;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes spin-reverse {
-            0% { transform: rotate(360deg); }
-            100% { transform: rotate(0deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
 
         /* ─── TOUCH & DRAG SLIDING ANNOUNCEMENT BANNER ─── */
         .announcement-slider-wrap {
@@ -140,9 +297,7 @@
             cursor: grab;
         }
 
-        .announcement-slider-wrap:active {
-            cursor: grabbing;
-        }
+        .announcement-slider-wrap:active { cursor: grabbing; }
 
         .announcement-slider {
             display: flex;
@@ -152,135 +307,21 @@
             will-change: transform;
         }
 
-        @media (max-width: 600px) {
-            .announcement-slider {
-                height: 160px;
-            }
-        }
+        @media (max-width: 600px) { .announcement-slider { height: 160px; } }
 
-        .announcement-slide {
-            min-width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-            cursor: pointer;
-            overflow: hidden;
-        }
+        .announcement-slide { min-width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; cursor: pointer; overflow: hidden; }
+        .announcement-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); pointer-events: none; }
+        .announcement-gradient-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(6, 6, 15, 0.95) 0%, rgba(6, 6, 15, 0.5) 45%, rgba(6, 6, 15, 0.15) 100%); z-index: 1; pointer-events: none; }
+        .announcement-content { position: relative; z-index: 2; padding: 16px 20px; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; pointer-events: none; }
+        .announcement-tag { background: linear-gradient(135deg, var(--primary-neon), #ff4b2b); color: #fff; padding: 3px 9px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-bottom: 4px; box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4); }
+        .announcement-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #ffffff; line-height: 1.2; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); margin-bottom: 3px; }
+        .announcement-desc { font-size: 11.5px; color: #cbd5e1; font-weight: 700; max-width: 460px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .announcement-btn { background: rgba(0, 243, 255, 0.15); color: var(--cyber-cyan); border: 1px solid var(--cyber-cyan); padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 800; font-family: 'Orbitron', sans-serif; white-space: nowrap; transition: all 0.25s ease; box-shadow: 0 0 12px rgba(0, 243, 255, 0.25); pointer-events: auto; }
+        .announcement-btn:hover { background: var(--cyber-cyan); color: #000; transform: translateY(-2px); box-shadow: 0 0 18px rgba(0, 243, 255, 0.6); }
 
-        .announcement-bg-img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.85);
-            pointer-events: none;
-        }
-
-        .announcement-gradient-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(6, 6, 15, 0.95) 0%, rgba(6, 6, 15, 0.5) 45%, rgba(6, 6, 15, 0.15) 100%);
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .announcement-content {
-            position: relative;
-            z-index: 2;
-            padding: 16px 20px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 12px;
-            pointer-events: none;
-        }
-
-        .announcement-tag {
-            background: linear-gradient(135deg, var(--primary-neon), #ff4b2b);
-            color: #fff;
-            padding: 3px 9px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-block;
-            margin-bottom: 4px;
-            box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4);
-        }
-
-        .announcement-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            font-weight: 900;
-            color: #ffffff;
-            line-height: 1.2;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-            margin-bottom: 3px;
-        }
-
-        .announcement-desc {
-            font-size: 11.5px;
-            color: #cbd5e1;
-            font-weight: 700;
-            max-width: 460px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .announcement-btn {
-            background: rgba(0, 243, 255, 0.15);
-            color: var(--cyber-cyan);
-            border: 1px solid var(--cyber-cyan);
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 800;
-            font-family: 'Orbitron', sans-serif;
-            white-space: nowrap;
-            transition: all 0.25s ease;
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.25);
-            pointer-events: auto;
-        }
-
-        .announcement-btn:hover {
-            background: var(--cyber-cyan);
-            color: #000;
-            transform: translateY(-2px);
-            box-shadow: 0 0 18px rgba(0, 243, 255, 0.6);
-        }
-
-        .slider-dots {
-            position: absolute;
-            bottom: 6px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 6px;
-            z-index: 5;
-        }
-
-        .slider-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .slider-dot.active {
-            width: 20px;
-            border-radius: 4px;
-            background: var(--primary-neon);
-            box-shadow: 0 0 8px var(--primary-neon);
-        }
+        .slider-dots { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 5; }
+        .slider-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); cursor: pointer; transition: all 0.3s; }
+        .slider-dot.active { width: 20px; border-radius: 4px; background: var(--primary-neon); box-shadow: 0 0 8px var(--primary-neon); }
 
         /* Auth Portal */
         #authScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; position: relative; z-index: 20; }
@@ -316,7 +357,6 @@
         .type-card:hover { border-color: var(--cyber-cyan); transform: translateY(-3px); }
         .type-icon { font-size: 30px; margin-bottom: 6px; }
 
-        /* Active Tournament Counter Badge */
         .mode-tourney-count { margin-top: 10px; background: rgba(10, 10, 24, 0.85); border: 1px solid rgba(0, 243, 255, 0.35); padding: 4px 10px; border-radius: 20px; font-size: 11px; color: var(--cyber-cyan); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; }
         .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-live); box-shadow: 0 0 8px var(--green-live); display: inline-block; }
 
@@ -329,55 +369,13 @@
         .credential-reveal { color: var(--cyber-cyan); background: rgba(0, 243, 255, 0.1); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); font-weight: 800; }
         .credential-mask { color: #64748b; letter-spacing: 2px; font-family: monospace; font-weight: 800; }
         
-        /* ─── TOURNAMENT SLOTS PROGRESS BAR ─── */
-        .slots-progressbar-wrap {
-            margin: 10px 0 6px;
-            background: rgba(10, 10, 25, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 8px;
-            padding: 8px 10px;
-        }
-        .slots-progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            margin-bottom: 5px;
-        }
-        .slots-progress-label {
-            color: var(--text-sub);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .slots-progress-count {
-            color: var(--cyber-cyan);
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            font-size: 11px;
-        }
-        .slots-progress-track {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-        }
-        .slots-progress-bar {
-            height: 100%;
-            border-radius: 4px;
-            background: linear-gradient(90deg, var(--cyber-cyan), var(--primary-neon));
-            transition: width 0.4s ease;
-            box-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
-        }
-        .slots-progress-bar.full {
-            background: linear-gradient(90deg, #ff4b2b, var(--primary-neon));
-            box-shadow: 0 0 8px rgba(233, 69, 96, 0.7);
-        }
+        .slots-progressbar-wrap { margin: 10px 0 6px; background: rgba(10, 10, 25, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 8px; padding: 8px 10px; }
+        .slots-progress-header { display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-bottom: 5px; }
+        .slots-progress-label { color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+        .slots-progress-count { color: var(--cyber-cyan); font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 11px; }
+        .slots-progress-track { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; position: relative; }
+        .slots-progress-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--cyber-cyan), var(--primary-neon)); transition: width 0.4s ease; box-shadow: 0 0 8px rgba(0, 243, 255, 0.5); }
+        .slots-progress-bar.full { background: linear-gradient(90deg, #ff4b2b, var(--primary-neon)); box-shadow: 0 0 8px rgba(233, 69, 96, 0.7); }
 
         .card-footer { padding: 12px 16px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
         .btn-join { width: 100%; padding: 10px; background: var(--primary-neon); color: #fff; border: none; border-radius: 8px; font-family: 'Orbitron', sans-serif; cursor: pointer; }
@@ -393,7 +391,7 @@
         .wallet-card { padding: 16px; text-align: center; }
         .wallet-card .amount { font-size: 24px; font-weight: 900; color: var(--green-live); font-family: 'Orbitron', sans-serif; }
         .wallet-card.bonus .amount { color: var(--gold); }
-        .topup-section { padding: 22px; border-radius: 16px; max-width: 480px; margin: 16px auto; }
+        .topup-section { padding: 22px; border-radius: 16px; max-width: 520px; margin: 16px auto; }
         .topup-amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
         .amount-btn { padding: 10px; background: rgba(10, 10, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; border-radius: 8px; cursor: pointer; font-family: 'Orbitron', sans-serif; }
         .amount-btn.selected { border-color: var(--primary-neon); background: rgba(233, 69, 96, 0.2); color: var(--primary-neon); }
@@ -401,6 +399,17 @@
         .form-group label { display: block; margin-bottom: 5px; font-size: 12px; color: var(--text-sub); }
         .form-group input { width: 100%; padding: 10px 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 10, 20, 0.7); color: #fff; border-radius: 8px; outline: none; }
         .btn { width: 100%; padding: 11px; background: var(--primary-neon); color: white; border: none; border-radius: 10px; font-family: 'Orbitron', sans-serif; cursor: pointer; }
+
+        /* ─── ACCOUNT SECTION STYLING ─── */
+        .account-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .account-card { padding: 20px; position: relative; }
+        .account-field { background: rgba(10, 10, 24, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .account-field .val { font-size: 14px; color: #fff; font-family: monospace; font-weight: 700; word-break: break-all; }
+        .copy-chip { background: rgba(0, 243, 255, 0.15); color: var(--cyber-cyan); border: 1px solid var(--cyber-cyan); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; white-space: nowrap; margin-left: 8px; }
+        .copy-chip:hover { background: var(--cyber-cyan); color: #000; }
+        
+        .btn-logout { background: linear-gradient(135deg, #e94560, #c0392b); color: #fff; border: 1px solid #ff4b2b; padding: 12px; border-radius: 10px; font-family: 'Orbitron', sans-serif; font-weight: 800; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(233, 69, 96, 0.35); transition: 0.3s; }
+        .btn-logout:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5); }
 
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-evenly; background: rgba(15, 15, 30, 0.95); backdrop-filter: blur(20px); border-top: 2px solid var(--primary-neon); padding: 7px 0; z-index: 100; }
         .bottom-nav button { flex: 1; background: none; border: none; color: var(--text-sub); font-size: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
@@ -427,6 +436,27 @@
         <div class="spotlight-tl"></div>
         <div class="spotlight-br"></div>
         <canvas id="esportsCanvas"></canvas>
+    </div>
+
+    <!-- ─── GRAPHICAL MODAL POPUP DIALOG (REPLACES BROWSER ALERTS / CONFIRMS) ─── -->
+    <div id="graphicalDialogOverlay" class="graphical-dialog-overlay">
+        <div class="graphical-dialog-box">
+            <div id="dialogIconWrap" class="dialog-icon-wrap">
+                <span id="dialogIcon">⚠️</span>
+            </div>
+            <h3 id="dialogTitle" class="dialog-title">ARENA X</h3>
+            <p id="dialogDesc" class="dialog-desc">Action confirmation message goes here.</p>
+            <div id="dialogActions" class="dialog-actions">
+                <button id="dialogCancelBtn" class="dialog-btn-cancel">Cancel</button>
+                <button id="dialogConfirmBtn" class="dialog-btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── GRAPHICAL TOAST NOTIFICATION ─── -->
+    <div id="graphicalToast" class="graphical-toast">
+        <span id="toastIcon">✨</span>
+        <span id="toastMessage">Notification message</span>
     </div>
 
     <!-- ─── CYBER RADAR RING LOGIN OVERLAY ANIMATION ─── -->
@@ -483,7 +513,7 @@
         <!-- Main Dashboard -->
         <div id="mainApp" class="hidden">
             <div class="topbar">
-                <div class="logo">
+                <div class="logo" onclick="showSection('tournaments')">
                     <img src="https://raw.githubusercontent.com/vinnu-yadav/Khiladi/refs/heads/main/arena.local.png" alt="Logo" />
                     <span class="logo-text">ARENA X</span>
                 </div>
@@ -606,13 +636,93 @@
                     <h2 class="section-title">🏆 My Joined Tournaments</h2>
                     <div id="myTournamentsList" class="tournament-grid"></div>
                 </div>
+
+                <!-- ─── ACCOUNT SECTION (REPLACES STANDALONE LOGOUT) ─── -->
+                <div id="accountSection" class="hidden">
+                    <h2 class="section-title">👤 My Account</h2>
+
+                    <div class="account-grid">
+                        <!-- 1. Registered Email Card -->
+                        <div class="account-card tilt-card">
+                            <h3 style="color: var(--cyber-cyan); font-size: 15px;">📧 Registered Email</h3>
+                            <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">Google Authenticated Account</p>
+                            
+                            <div class="account-field">
+                                <span class="val" id="accEmail">loading...</span>
+                                <button class="copy-chip" onclick="copyEmail()">Copy</button>
+                            </div>
+                            <div style="margin-top: 8px; font-size: 11px; color: var(--green-live); display: flex; align-items: center; gap: 4px;">
+                                <span>✔</span> Verified & Protected
+                            </div>
+                        </div>
+
+                        <!-- 2. Wallet UPI ID Card -->
+                        <div class="account-card tilt-card">
+                            <h3 style="color: #ff9900; font-size: 15px;">🔗 Wallet UPI ID</h3>
+                            <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">For Direct Tournament Winnings Payout</p>
+                            
+                            <div class="account-field">
+                                <span class="val" id="accUpiId" style="color: #ff9900;">Not linked</span>
+                            </div>
+
+                            <div style="margin-top: 10px;">
+                                <div class="form-group" style="margin-bottom: 8px;">
+                                    <input type="text" id="accUpiInput" placeholder="Enter new UPI ID (e.g. name@upi)" style="font-size: 12px; padding: 8px 10px;" />
+                                </div>
+                                <button class="btn" style="background: #ff9900; color: #000; padding: 8px; font-size: 12px;" onclick="saveAccountUpiId()">Update & Lock UPI ID</button>
+                                <div id="accUpiMsg" style="margin-top: 6px; text-align: center; font-size: 11px;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Wallet Balance Overview Card -->
+                        <div class="account-card tilt-card" style="border-color: var(--primary-neon);">
+                            <h3 style="color: var(--primary-neon); font-size: 15px;">💰 Wallet Balance</h3>
+                            <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">Total Available Funds</p>
+
+                            <div style="margin: 12px 0; text-align: center;">
+                                <span style="font-size: 28px; font-weight: 900; color: var(--gold); font-family: 'Orbitron', sans-serif;">
+                                    ₹<span id="accTotalWallet">0</span>
+                                </span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                                <div style="background: rgba(10,10,24,0.7); padding: 8px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
+                                    <div style="font-size: 10px; color: var(--text-sub);">Bonus Cash</div>
+                                    <div style="font-size: 14px; color: var(--gold); font-family: 'Orbitron', sans-serif;">₹<span id="accBonusCash">0</span></div>
+                                </div>
+                                <div style="background: rgba(10,10,24,0.7); padding: 8px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
+                                    <div style="font-size: 10px; color: var(--text-sub);">Deposited Cash</div>
+                                    <div style="font-size: 14px; color: var(--green-live); font-family: 'Orbitron', sans-serif;">₹<span id="accDepositedCash">0</span></div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn" style="flex: 1; padding: 8px; font-size: 11px;" onclick="showSection('wallet')">+ Add Funds</button>
+                                <button class="btn" style="flex: 1; padding: 8px; font-size: 11px; background: rgba(0, 243, 255, 0.2); color: var(--cyber-cyan); border: 1px solid var(--cyber-cyan);" onclick="showSection('wallet')">Withdraw</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Session & Logout Card -->
+                    <div class="tilt-card" style="padding: 20px; max-width: 480px; margin: 20px auto 0; text-align: center;">
+                        <h3 style="color: #fff; font-size: 15px; margin-bottom: 6px;">🚪 Session Security</h3>
+                        <p style="color: var(--text-sub); font-size: 11.5px; margin-bottom: 16px;">
+                            Sign out of this session safely. Your wallet balance and match registrations remain secured in your account.
+                        </p>
+                        <button class="btn-logout" onclick="promptLogout()">
+                            <span>🚪</span>
+                            <span>Log Out of Arena X</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
+            <!-- Bottom Navigation with Account replacing standalone Logout -->
             <div class="bottom-nav">
                 <button onclick="showSection('tournaments')" id="navTournaments" class="active"><span style="font-size:16px;">🏆</span> Tournaments</button>
                 <button onclick="showSection('wallet')" id="navWallet"><span style="font-size:16px;">💳</span> Wallet</button>
                 <button onclick="showSection('myTournaments')" id="navMy"><span style="font-size:16px;">🎮</span> My Matches</button>
-                <button onclick="logout()"><span style="font-size:16px;">🚪</span> Logout</button>
+                <button onclick="showSection('account')" id="navAccount"><span style="font-size:16px;">👤</span> Account</button>
             </div>
         </div>
 
@@ -658,6 +768,75 @@
         const loginOverlay = document.getElementById('loginOverlay');
         const loaderTitle = document.getElementById('loaderTitle');
         const loaderSub = document.getElementById('loaderSub');
+
+        // ─── GRAPHICAL MODAL CONTROLLER ───
+        const dialogOverlay = document.getElementById('graphicalDialogOverlay');
+        const dialogIconWrap = document.getElementById('dialogIconWrap');
+        const dialogIcon = document.getElementById('dialogIcon');
+        const dialogTitle = document.getElementById('dialogTitle');
+        const dialogDesc = document.getElementById('dialogDesc');
+        const dialogCancelBtn = document.getElementById('dialogCancelBtn');
+        const dialogConfirmBtn = document.getElementById('dialogConfirmBtn');
+        let dialogConfirmCallback = null;
+        let dialogCancelCallback = null;
+
+        function showGraphicalModal({
+            title = 'ARENA X',
+            message = '',
+            type = 'info', // 'confirm', 'success', 'warning', 'error'
+            icon = '⚠️',
+            confirmText = 'OK',
+            cancelText = null,
+            btnClass = 'dialog-btn-primary',
+            onConfirm = null,
+            onCancel = null
+        }) {
+            dialogTitle.textContent = title;
+            dialogDesc.textContent = message;
+            dialogIcon.textContent = icon;
+            dialogIconWrap.className = 'dialog-icon-wrap ' + type;
+
+            dialogConfirmBtn.textContent = confirmText;
+            dialogConfirmBtn.className = btnClass;
+
+            if (cancelText) {
+                dialogCancelBtn.textContent = cancelText;
+                dialogCancelBtn.style.display = 'inline-block';
+            } else {
+                dialogCancelBtn.style.display = 'none';
+            }
+
+            dialogConfirmCallback = onConfirm;
+            dialogCancelCallback = onCancel;
+            dialogOverlay.classList.add('active');
+        }
+
+        function closeGraphicalModal() {
+            dialogOverlay.classList.remove('active');
+        }
+
+        dialogConfirmBtn.onclick = function() {
+            closeGraphicalModal();
+            if (typeof dialogConfirmCallback === 'function') dialogConfirmCallback();
+        };
+
+        dialogCancelBtn.onclick = function() {
+            closeGraphicalModal();
+            if (typeof dialogCancelCallback === 'function') dialogCancelCallback();
+        };
+
+        // Quick Graphical Toast
+        let toastTimer = null;
+        function showGraphicalToast(message, icon = '✨') {
+            const toast = document.getElementById('graphicalToast');
+            document.getElementById('toastMessage').textContent = message;
+            document.getElementById('toastIcon').textContent = icon;
+            toast.classList.add('active');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('active');
+            }, 2500);
+        }
 
         function showLoading(title, sub) {
             if (loaderTitle) loaderTitle.textContent = title || 'AUTHENTICATING';
@@ -790,6 +969,8 @@
             document.getElementById('mainApp').classList.remove('hidden');
             document.getElementById('dashPlayerName').textContent = user.displayName || 'Gamer';
 
+            document.getElementById('accEmail').textContent = user.email || 'No email available';
+
             db.ref('users/' + user.uid).on('value', snap => {
                 userData = snap.val() || {};
                 const bonus = userData.wallet?.bonus || 0;
@@ -802,11 +983,16 @@
                 document.getElementById('totalWallet').textContent = total;
                 document.getElementById('dashTotalWallet').textContent = total;
                 document.getElementById('dashMatchesCount').textContent = userData.joinedTournaments ? Object.keys(userData.joinedTournaments).length : 0;
-                
-                // ✅ Updates the rank immediately in real time
                 document.getElementById('dashUserRank').textContent = userData.rank || '⚡ BRONZE';
 
+                document.getElementById('accTotalWallet').textContent = total;
+                document.getElementById('accBonusCash').textContent = bonus;
+                document.getElementById('accDepositedCash').textContent = deposited;
+
+                const upiDisplay = userData.upiId || 'Not linked yet';
+                document.getElementById('accUpiId').textContent = upiDisplay;
                 if (userData.upiId) {
+                    document.getElementById('accUpiInput').value = userData.upiId;
                     document.getElementById('upiSetupSection').classList.add('hidden');
                     document.getElementById('withdrawFormSection').classList.remove('hidden');
                 } else {
@@ -828,12 +1014,45 @@
             initAnnouncementBannerSlider();
         }
 
-        function logout() { 
-            showLoading('LOGGING OUT', 'Safely closing your session...');
-            auth.signOut().then(() => location.reload()); 
+        function copyEmail() {
+            const email = document.getElementById('accEmail').textContent;
+            if (email && email !== 'loading...') {
+                navigator.clipboard.writeText(email);
+                showGraphicalToast('Registered email copied!', '📋');
+            }
         }
 
-        // ─── HELPER: GET JOINED PARTICIPANTS COUNT ───
+        function saveAccountUpiId() {
+            const val = document.getElementById('accUpiInput').value.trim();
+            const msgEl = document.getElementById('accUpiMsg');
+            if (!val || val.length < 5) {
+                msgEl.innerHTML = '<span class="error-msg">Enter a valid UPI address</span>';
+                return;
+            }
+            db.ref('users/' + currentUser.uid + '/upiId').set(val).then(() => {
+                showGraphicalToast('UPI ID locked successfully!', '🔒');
+                msgEl.innerHTML = '<span class="success-msg">✅ UPI ID successfully updated and locked!</span>';
+                setTimeout(() => { msgEl.innerHTML = ''; }, 3000);
+            });
+        }
+
+        // ─── GRAPHICAL LOGOUT CONFIRMATION (REPLACES BROWSER CONFIRM) ───
+        function promptLogout() {
+            showGraphicalModal({
+                title: 'LOG OUT OF ARENA X?',
+                message: 'Are you sure you want to log out? Your balance, registered matches, and account credentials will remain safe.',
+                type: 'confirm',
+                icon: '🚪',
+                confirmText: 'Yes, Log Out',
+                cancelText: 'Cancel',
+                btnClass: 'dialog-btn-primary',
+                onConfirm: () => {
+                    showLoading('LOGGING OUT', 'Safely closing your gaming session...');
+                    auth.signOut().then(() => location.reload());
+                }
+            });
+        }
+
         function getJoinedCount(t) {
             if (!t || !t.participants) return 0;
             let count = 0;
@@ -848,11 +1067,10 @@
         let currentSlideIndex = 0;
         let bannerSliderTimer = null;
         let activeBannersList = [];
-
-        let touchStartX = 0;
-        let touchStartY = 0;
         let dragOffset = 0;
         let isDragging = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
 
         function initAnnouncementBannerSlider() {
             db.ref('banners').on('value', snap => {
@@ -912,22 +1130,10 @@
 
             activeBannersList.forEach((banner, idx) => {
                 const targetUrl = (banner.actionUrl && banner.actionUrl.trim() !== '') ? banner.actionUrl : '';
-                
-                const tagHtml = (banner.tag && banner.tag.trim() !== '') 
-                    ? `<span class="announcement-tag">${banner.tag}</span>` 
-                    : '';
-                
-                const titleHtml = (banner.title && banner.title.trim() !== '') 
-                    ? `<h3 class="announcement-title">${banner.title}</h3>` 
-                    : '';
-                
-                const descHtml = (banner.description && banner.description.trim() !== '') 
-                    ? `<p class="announcement-desc">${banner.description}</p>` 
-                    : '';
-                
-                const btnHtml = (banner.btnText && banner.btnText.trim() !== '') 
-                    ? `<div><button class="announcement-btn">${banner.btnText}</button></div>` 
-                    : '';
+                const tagHtml = (banner.tag && banner.tag.trim() !== '') ? `<span class="announcement-tag">${banner.tag}</span>` : '';
+                const titleHtml = (banner.title && banner.title.trim() !== '') ? `<h3 class="announcement-title">${banner.title}</h3>` : '';
+                const descHtml = (banner.description && banner.description.trim() !== '') ? `<p class="announcement-desc">${banner.description}</p>` : '';
+                const btnHtml = (banner.btnText && banner.btnText.trim() !== '') ? `<div><button class="announcement-btn">${banner.btnText}</button></div>` : '';
 
                 slidesHtml += `
                     <div class="announcement-slide" onclick="onBannerClicked('${encodeURIComponent(targetUrl)}')">
@@ -1035,20 +1241,12 @@
                 return;
             }
 
-            if (url.startsWith('#mode:')) {
-                const parts = url.replace('#mode:', '').split(':');
-                const gameName = parts[0]?.trim();
-                const modeType = parts[1]?.trim();
-                showSection('tournaments');
-                if (gameName) selectGame(gameName);
-                if (modeType) selectType(modeType);
-                return;
-            }
-
             if (url === '#wallet') {
                 showSection('wallet');
             } else if (url === '#myTournaments') {
                 showSection('myTournaments');
+            } else if (url === '#account') {
+                showSection('account');
             } else {
                 showSection('tournaments');
             }
@@ -1133,13 +1331,10 @@
                 { id: '6v6', name: '6v6 Mega Tournament', desc: '12 Players Max (6 vs 6 Teams)', imageUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=120', fallbackEmoji: '🔥', color: '#e67e22' },
                 { id: 'solo', name: 'Solo BR', desc: 'Individual Survival (48 Players)', imageUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=120', fallbackEmoji: '🎯', color: '#3498db' },
                 { id: 'squad', name: 'Squad BR', desc: '4-Player Squad (48 Players)', imageUrl: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=120', fallbackEmoji: '🏆', color: '#e67e22' }
-            ] : gameId === 'BGMI' ? [
+            ] : [
                 { id: 'tdm', name: 'TDM 4v4', desc: '8 Players Max (2 Teams)', imageUrl: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?q=80&w=120', fallbackEmoji: '🔫', color: '#af7ac5' },
                 { id: 'solo', name: 'Solo Classic', desc: '100 Players Battle Royale', imageUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=120', fallbackEmoji: '🎯', color: 'var(--cyber-cyan)' },
                 { id: 'squad', name: 'Squad Classic', desc: '4-Player Squad Warfare (100P)', imageUrl: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=120', fallbackEmoji: '👥', color: 'var(--primary-neon)' }
-            ] : [
-                { id: 'solo', name: 'Solo Matches', desc: 'Individual Survival', imageUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=120', fallbackEmoji: '🎯', color: 'var(--cyber-cyan)' },
-                { id: 'squad', name: 'Squad Matches', desc: 'Team Warfare', imageUrl: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=120', fallbackEmoji: '👥', color: 'var(--primary-neon)' }
             ];
 
             let html = '';
@@ -1222,7 +1417,6 @@
                             <div class="info-row"><span>Date & Time</span><span>${t.dateTime || 'TBD'}</span></div>
                             <div class="info-row"><span>Status</span><span style="color:var(--green-live);">${t.status}</span></div>
 
-                            <!-- ─── SLOTS PROGRESS BAR ─── -->
                             <div class="slots-progressbar-wrap">
                                 <div class="slots-progress-header">
                                     <span class="slots-progress-label">👥 Joined Slots</span>
@@ -1252,13 +1446,23 @@
             const t = allTournaments[tId];
             if (!t) return;
             if (userData?.joinedTournaments && userData.joinedTournaments[tId]) {
-                alert('You have already joined this tournament!');
+                showGraphicalModal({
+                    title: 'ALREADY JOINED',
+                    message: 'You have already registered for this tournament!',
+                    type: 'warning',
+                    icon: '🎮'
+                });
                 return;
             }
             const joinedCount = getJoinedCount(t);
             const maxSlots = t.maxPlayers || 100;
             if (joinedCount >= maxSlots) {
-                alert('This tournament is full! No slots remaining.');
+                showGraphicalModal({
+                    title: 'SLOTS ARE FULL',
+                    message: 'This tournament is full! No additional player slots remaining.',
+                    type: 'error',
+                    icon: '🚫'
+                });
                 return;
             }
 
@@ -1266,8 +1470,15 @@
             const total = (wallet.bonus || 0) + (wallet.deposited || 0);
 
             if (total < (t.entryFee || 0)) {
-                alert(`Insufficient wallet balance! You need ₹${t.entryFee}.`);
-                showSection('wallet');
+                showGraphicalModal({
+                    title: 'INSUFFICIENT BALANCE',
+                    message: `You need ₹${t.entryFee} to join this match. Please top up your wallet.`,
+                    type: 'warning',
+                    icon: '💳',
+                    confirmText: 'Go to Wallet',
+                    btnClass: 'dialog-btn-cyan',
+                    onConfirm: () => showSection('wallet')
+                });
                 return;
             }
 
@@ -1294,14 +1505,19 @@
 
         function submitJoinDetails() {
             if (userData?.joinedTournaments && userData.joinedTournaments[window.currentJoinId]) {
-                alert('You have already joined this tournament!');
+                showGraphicalModal({ title: 'ALREADY JOINED', message: 'You have already joined this match.', type: 'warning' });
                 closeJoinModal();
                 return;
             }
             const uid = document.getElementById('playerUidInput').value.trim();
             const ign = document.getElementById('playerNameInput').value.trim();
             if (!uid || !/^\d+$/.test(uid) || !ign) {
-                alert('Please enter a valid numeric UID and IGN.');
+                showGraphicalModal({
+                    title: 'INVALID CREDENTIALS',
+                    message: 'Please enter a valid numeric UID and In-Game Name (IGN).',
+                    type: 'warning',
+                    icon: '⚠️'
+                });
                 return;
             }
 
@@ -1338,9 +1554,18 @@
             };
 
             db.ref().update(updates).then(() => {
-                alert('🎉 Successfully Joined Match!');
                 closeJoinModal();
-            }).catch(e => alert(e.message));
+                showGraphicalModal({
+                    title: 'MATCH JOINED!',
+                    message: `🎉 Successfully joined ${t.name}! You can view the Room ID & Password in My Matches once generated by the admin.`,
+                    type: 'success',
+                    icon: '🏆',
+                    confirmText: 'View My Matches',
+                    onConfirm: () => showSection('myTournaments')
+                });
+            }).catch(e => {
+                showGraphicalModal({ title: 'ERROR', message: e.message, type: 'error', icon: '❌' });
+            });
         }
 
         function listenToWithdrawals() {
@@ -1448,7 +1673,6 @@
                             <div class="info-row"><span>Prize Pool</span><span class="prize-pool">₹${t.prizePool}</span></div>
                             <div class="info-row"><span>Date & Time</span><span>${t.dateTime}</span></div>
 
-                            <!-- ─── SLOTS PROGRESS BAR ─── -->
                             <div class="slots-progressbar-wrap">
                                 <div class="slots-progress-header">
                                     <span class="slots-progress-label">👥 Joined Slots</span>
@@ -1476,8 +1700,12 @@
 
         function saveUpiId() {
             const upiId = document.getElementById('setupUpiId').value.trim();
-            if (!upiId || upiId.length < 5) return;
+            if (!upiId || upiId.length < 5) {
+                document.getElementById('upiSetupMsg').innerHTML = '<span class="error-msg">Enter a valid UPI ID</span>';
+                return;
+            }
             db.ref('users/' + currentUser.uid + '/upiId').set(upiId).then(() => {
+                showGraphicalToast('UPI ID locked successfully!', '🔒');
                 document.getElementById('upiSetupMsg').innerHTML = '<span class="success-msg">✅ UPI ID Locked</span>';
             });
         }
@@ -1515,6 +1743,12 @@
                 requestedAt: Date.now()
             };
             await db.ref().update(updates);
+            showGraphicalModal({
+                title: 'WITHDRAWAL SUBMITTED',
+                message: `💸 Your withdrawal request of ₹${amt} to UPI (${userData?.upiId}) has been submitted for admin approval.`,
+                type: 'success',
+                icon: '✅'
+            });
             document.getElementById('withdrawMsg').innerHTML = '<span class="success-msg">✅ Withdrawal Request Submitted!</span>';
         }
 
@@ -1522,6 +1756,8 @@
             document.getElementById('tournamentsSection').classList.add('hidden');
             document.getElementById('walletSection').classList.add('hidden');
             document.getElementById('myTournamentsSection').classList.add('hidden');
+            document.getElementById('accountSection').classList.add('hidden');
+
             document.getElementById(sec + 'Section').classList.remove('hidden');
 
             document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
@@ -1532,7 +1768,10 @@
                 document.getElementById('navWallet').classList.add('active');
             } else if (sec === 'myTournaments') {
                 document.getElementById('navMy').classList.add('active');
+            } else if (sec === 'account') {
+                document.getElementById('navAccount').classList.add('active');
             }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
