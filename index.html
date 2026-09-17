@@ -51,7 +51,6 @@
         .wallet-badge { background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), rgba(0, 243, 255, 0.15)); padding: 7px 16px; border-radius: 20px; border: 1px solid var(--primary-neon); font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.3s; }
         .wallet-badge:hover { transform: scale(1.04); border-color: var(--cyber-cyan); }
 
-        /* ─── FIXED ZERO-BLUR OVERLAYS (display: none by default) ─── */
         .login-overlay,
         .graphical-dialog-overlay,
         .insta-modal-overlay,
@@ -97,24 +96,26 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
 
-        .announcement-slider-wrap { margin-bottom: 22px; position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(233, 69, 96, 0.4); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); background: #090918; cursor: grab; }
-        .announcement-slider { display: flex; width: 100%; height: 180px; transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .announcement-slide { min-width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; cursor: pointer; overflow: hidden; }
-        .announcement-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); pointer-events: none; }
-        .announcement-gradient-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(6, 6, 15, 0.95) 0%, rgba(6, 6, 15, 0.5) 45%, rgba(6, 6, 15, 0.15) 100%); z-index: 1; pointer-events: none; }
-        .announcement-content { position: relative; z-index: 2; padding: 16px 20px; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; pointer-events: none; }
-        .announcement-tag { background: linear-gradient(135deg, var(--primary-neon), #ff4b2b); color: #fff; padding: 3px 9px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-bottom: 4px; }
-        .announcement-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #ffffff; }
-        .announcement-desc { font-size: 11.5px; color: #cbd5e1; max-width: 460px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-        /* Auth Screen is visible by default */
+        /* Auth Portal Card */
         #authScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; position: relative; z-index: 20; }
-        .auth-portal { max-width: 410px; width: 100%; background: rgba(15, 15, 32, 0.96); border: 2px solid var(--primary-neon); border-radius: 22px; padding: 32px 24px; text-align: center; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7); }
-        .bonus-banner { background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(233, 69, 96, 0.2)); border: 1px solid rgba(255, 215, 0, 0.5); border-radius: 12px; padding: 10px; margin: 14px 0; }
-        .bonus-banner .bonus-amt { font-size: 22px; font-weight: 900; color: var(--gold); font-family: 'Orbitron', sans-serif; }
+        .auth-portal { max-width: 420px; width: 100%; background: rgba(15, 15, 32, 0.98); border: 2px solid var(--primary-neon); border-radius: 22px; padding: 28px 24px; text-align: center; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7); }
+        .bonus-banner { background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(233, 69, 96, 0.2)); border: 1px solid rgba(255, 215, 0, 0.5); border-radius: 12px; padding: 10px; margin: 12px 0; }
+        .bonus-banner .bonus-amt { font-size: 20px; font-weight: 900; color: var(--gold); font-family: 'Orbitron', sans-serif; }
 
-        .google-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #ffffff; color: #1a1a2e; border: none; padding: 13px 20px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 8px; }
+        .auth-tabs { display: flex; gap: 8px; margin-bottom: 14px; background: rgba(10, 10, 24, 0.7); padding: 4px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .auth-tab-btn { flex: 1; padding: 8px; background: transparent; border: none; color: var(--text-sub); border-radius: 8px; cursor: pointer; font-size: 12px; font-family: 'Orbitron', sans-serif; }
+        .auth-tab-btn.active { background: var(--primary-neon); color: #fff; box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4); }
+
+        .google-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #ffffff; color: #1a1a2e; border: none; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 6px; }
         .google-btn:hover { background: #f8fafc; transform: translateY(-2px); }
+
+        .demo-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: rgba(0, 243, 255, 0.15); color: var(--cyber-cyan); border: 1px solid var(--cyber-cyan); padding: 10px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; font-family: 'Orbitron', sans-serif; cursor: pointer; margin-top: 10px; }
+        .demo-btn:hover { background: var(--cyber-cyan); color: #000; }
+
+        .form-group { margin-bottom: 12px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 11px; color: var(--text-sub); }
+        .form-group input { width: 100%; padding: 10px 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 10, 20, 0.7); color: #fff; border-radius: 8px; outline: none; }
+        .btn { width: 100%; padding: 11px; background: var(--primary-neon); color: white; border: none; border-radius: 10px; font-family: 'Orbitron', sans-serif; cursor: pointer; }
 
         .insta-modal { background: rgba(15, 15, 32, 0.98); border: 2px solid #e1306c; border-radius: 20px; padding: 26px; max-width: 440px; width: 92%; }
 
@@ -146,14 +147,6 @@
         .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
         .prize-pool { color: var(--gold); font-size: 15px; font-family: 'Orbitron', sans-serif; }
         .credential-reveal { color: var(--cyber-cyan); background: rgba(0, 243, 255, 0.1); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); font-weight: 800; }
-        
-        .slots-progressbar-wrap { margin: 10px 0 6px; background: rgba(10, 10, 25, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 8px; padding: 8px 10px; }
-        .slots-progress-header { display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-bottom: 5px; }
-        .slots-progress-label { color: var(--text-sub); font-weight: 700; text-transform: uppercase; }
-        .slots-progress-count { color: var(--cyber-cyan); font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 11px; }
-        .slots-progress-track { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; position: relative; }
-        .slots-progress-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--cyber-cyan), var(--primary-neon)); transition: width 0.4s ease; }
-        .slots-progress-bar.full { background: linear-gradient(90deg, #ff4b2b, var(--primary-neon)); }
 
         .card-footer { padding: 12px 16px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
         .btn-join { width: 100%; padding: 10px; background: var(--primary-neon); color: #fff; border: none; border-radius: 8px; font-family: 'Orbitron', sans-serif; cursor: pointer; }
@@ -173,10 +166,6 @@
         .topup-amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
         .amount-btn { padding: 10px; background: rgba(10, 10, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; border-radius: 8px; cursor: pointer; font-family: 'Orbitron', sans-serif; }
         .amount-btn.selected { border-color: var(--primary-neon); background: rgba(233, 69, 96, 0.2); color: var(--primary-neon); }
-        .form-group { margin-bottom: 14px; text-align: left; }
-        .form-group label { display: block; margin-bottom: 5px; font-size: 12px; color: var(--text-sub); }
-        .form-group input { width: 100%; padding: 10px 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 10, 20, 0.7); color: #fff; border-radius: 8px; outline: none; }
-        .btn { width: 100%; padding: 11px; background: var(--primary-neon); color: white; border: none; border-radius: 10px; font-family: 'Orbitron', sans-serif; cursor: pointer; }
 
         .account-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
         .account-card { padding: 20px; position: relative; }
@@ -191,15 +180,9 @@
         .bottom-nav button { flex: 1; background: none; border: none; color: var(--text-sub); font-size: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
         .bottom-nav button.active { color: var(--primary-neon); }
 
-        .join-modal { background: rgba(15, 15, 32, 0.98); border: 2px solid var(--primary-neon); border-radius: 18px; padding: 24px; max-width: 460px; width: 92%; max-height: 88vh; overflow-y: auto; }
-        .player-entry { background: rgba(10, 10, 20, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 10px; margin-bottom: 8px; }
-        .fee-display { background: rgba(0, 243, 255, 0.08); padding: 10px 14px; border-radius: 8px; margin: 14px 0; display: flex; justify-content: space-between; }
-        .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
-        .modal-actions button { flex: 1; padding: 10px; border: none; border-radius: 8px; font-family: 'Orbitron', sans-serif; cursor: pointer; }
-        .btn-cancel { background: rgba(255, 255, 255, 0.1); color: var(--text-sub); }
         .hidden { display: none !important; }
-        .error-msg { color: var(--primary-neon); font-size: 12px; }
-        .success-msg { color: var(--green-live); font-size: 12px; }
+        .error-msg { color: #ff4b2b; font-size: 12px; margin-top: 6px; display: block; }
+        .success-msg { color: var(--green-live); font-size: 12px; margin-top: 6px; display: block; }
         .no-data { text-align: center; padding: 30px; color: var(--text-sub); }
     </style>
 </head>
@@ -231,7 +214,7 @@
         <span id="toastMessage">Notification message</span>
     </div>
 
-    <!-- RADAR RING LOGIN OVERLAY (Hidden by default, no blur) -->
+    <!-- RADAR RING LOGIN OVERLAY -->
     <div id="loginOverlay" class="login-overlay">
         <div class="login-loader-box">
             <div class="cyber-radar-ring">
@@ -240,7 +223,7 @@
                 <img src="https://raw.githubusercontent.com/vinnu-yadav/Khiladi/refs/heads/main/arena.local.png" alt="Arena X" style="width: 28px; height: auto;" />
             </div>
             <h3 id="loaderTitle" style="color: var(--cyber-cyan); font-size: 14px; margin-bottom: 4px;">AUTHENTICATING</h3>
-            <p id="loaderSub" style="color: var(--text-sub); font-size: 11px;">Connecting to Supabase Cloud Gateway...</p>
+            <p id="loaderSub" style="color: var(--text-sub); font-size: 11px;">Connecting to Supabase...</p>
         </div>
     </div>
 
@@ -264,25 +247,58 @@
     </div>
 
     <div class="app-layer">
-        <!-- Auth Screen (VISIBLE BY DEFAULT - NO BLUR) -->
+        <!-- ─── AUTH SCREEN (DUAL GOOGLE + EMAIL AUTH) ─── -->
         <div id="authScreen">
             <div class="auth-portal">
-                <img src="https://raw.githubusercontent.com/vinnu-yadav/Khiladi/refs/heads/main/arena.local.png" alt="Arena X" style="width: 44px; margin-bottom: 10px;" />
+                <img src="https://raw.githubusercontent.com/vinnu-yadav/Khiladi/refs/heads/main/arena.local.png" alt="Arena X" style="width: 44px; margin-bottom: 8px;" />
                 <h2 style="font-size: 20px;">ARENA X</h2>
                 <div class="bonus-banner">
                     <h4>🎁 NEW PLAYER BONUS</h4>
                     <div class="bonus-amt">₹30 FREE CASH</div>
-                    <p style="color: var(--text-sub); font-size: 10.5px;">Get ₹30 welcome bonus upon sign-in!</p>
+                    <p style="color: var(--text-sub); font-size: 10px;">Instant ₹30 welcome bonus on registration!</p>
                 </div>
-                <button class="google-btn" id="googleSignInBtn">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt="Google" />
-                    <span>Sign in with Google</span>
+
+                <!-- Auth Selector Tabs -->
+                <div class="auth-tabs">
+                    <button class="auth-tab-btn active" id="tabGoogle" onclick="switchAuthTab('google')">Google</button>
+                    <button class="auth-tab-btn" id="tabEmail" onclick="switchAuthTab('email')">Email / Password</button>
+                </div>
+
+                <!-- Google Auth View -->
+                <div id="googleAuthSection">
+                    <button class="google-btn" id="googleSignInBtn" onclick="handleGoogleSignIn()">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt="Google" />
+                        <span>Sign in with Google</span>
+                    </button>
+                </div>
+
+                <!-- Email & Password Auth View -->
+                <div id="emailAuthSection" class="hidden">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="emailInput" placeholder="player@gmail.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="passwordInput" placeholder="Min. 6 characters" />
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                        <button class="btn" style="flex: 1;" onclick="handleEmailLogin()">Sign In</button>
+                        <button class="btn" style="flex: 1; background: rgba(0, 243, 255, 0.2); color: var(--cyber-cyan); border: 1px solid var(--cyber-cyan);" onclick="handleEmailRegister()">Sign Up</button>
+                    </div>
+                </div>
+
+                <!-- 1-Click Test Demo Login (Always Works) -->
+                <button class="demo-btn" onclick="handleQuickTestLogin()">
+                    ⚡ 1-Click Instant Play (Test Gamer)
                 </button>
-                <div id="authStatusMsg" style="margin-top: 12px;"></div>
+
+                <!-- Live Diagnostic Error Message -->
+                <div id="authStatusMsg"></div>
             </div>
         </div>
 
-        <!-- Main Dashboard (Hidden until user logs in) -->
+        <!-- ─── MAIN TOURNAMENT APP ─── -->
         <div id="mainApp" class="hidden">
             <div class="topbar">
                 <div class="logo" onclick="showSection('tournaments')">
@@ -316,10 +332,6 @@
 
                 <!-- Tournaments Section -->
                 <div id="tournamentsSection">
-                    <div id="announcementBannerSection" class="announcement-slider-wrap">
-                        <div class="announcement-slider" id="announcementSliderTrack"></div>
-                    </div>
-
                     <div id="gamesView">
                         <h2 class="section-title">🎮 Select Game</h2>
                         <div id="gamesList" class="game-grid"></div>
@@ -424,7 +436,7 @@
                     <div class="account-grid">
                         <div class="account-card tilt-card">
                             <h3 style="color: var(--cyber-cyan); font-size: 15px;">📧 Registered Email</h3>
-                            <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">Google Authenticated Account</p>
+                            <p style="color: var(--text-sub); font-size: 11px; margin-top: 2px;">Authenticated Player Account</p>
                             <div class="account-field">
                                 <span class="val" id="accEmail">loading...</span>
                                 <button class="copy-chip" onclick="copyEmail()">Copy</button>
@@ -460,14 +472,6 @@
                             <div class="account-field">
                                 <span class="val" id="accUpiId" style="color: #ff9900;">Not linked</span>
                             </div>
-
-                            <div id="accUpiSetupBox" class="hidden" style="margin-top: 10px;">
-                                <div class="form-group" style="margin-bottom: 8px;">
-                                    <input type="text" id="accUpiInput" placeholder="Enter UPI ID once (e.g. name@upi)" style="font-size: 12px; padding: 8px 10px;" />
-                                </div>
-                                <button class="btn" style="background: #ff9900; color: #000; padding: 8px; font-size: 12px;" onclick="saveAccountUpiId()">Save & Permanently Lock</button>
-                                <div id="accUpiMsg" style="margin-top: 6px; text-align: center; font-size: 11px;"></div>
-                            </div>
                         </div>
 
                         <div class="account-card tilt-card" style="border-color: var(--primary-neon);">
@@ -498,7 +502,7 @@
                     <div class="tilt-card" style="padding: 20px; max-width: 480px; margin: 20px auto 0; text-align: center;">
                         <h3 style="color: #fff; font-size: 15px; margin-bottom: 6px;">🚪 Session Security</h3>
                         <p style="color: var(--text-sub); font-size: 11.5px; margin-bottom: 16px;">
-                            Sign out safely. Your wallet balance and match registrations remain secured in Supabase.
+                            Sign out safely. Your wallet balance and registrations remain secured.
                         </p>
                         <button class="btn-logout" onclick="promptLogout()">
                             <span>🚪</span>
@@ -515,31 +519,14 @@
                 <button onclick="showSection('account')" id="navAccount"><span style="font-size:16px;">👤</span> Account</button>
             </div>
         </div>
-
-        <!-- Join Modal -->
-        <div id="joinModalOverlay" class="join-modal-overlay">
-            <div class="join-modal">
-                <h2 id="joinModalTitle" style="color: var(--primary-neon); margin-bottom: 3px;">Join Tournament</h2>
-                <div id="joinModalFields"></div>
-                <div class="fee-display">
-                    <span>Entry Fee</span>
-                    <span id="joinModalFee" style="color: var(--gold);">₹0</span>
-                </div>
-                <div class="modal-actions">
-                    <button class="btn-cancel" onclick="closeJoinModal()">Cancel</button>
-                    <button class="btn-join" id="joinModalSubmitBtn" onclick="submitJoinDetails()">Confirm & Join</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
         // =========================================================================
-        // 🔑 SUPABASE CONFIGURATION
+        // 🔑 SUPABASE CLIENT
         // =========================================================================
         const SUPABASE_PROJECT_URL = "https://iwoicemarlklmzuucshr.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3b2ljZW1hcmxrbG16dXVjc2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjEwMjQsImV4cCI6MjEwMzc5NzAyNH0.S01AUIYYr1x0u2RMNKZhDrvQhl_jLWHh_ZXdG9mt8eo";
-        // =========================================================================
 
         let supabase = null;
         try {
@@ -554,231 +541,184 @@
         let selectedGame = null, selectedType = null;
         let myJoinedTournamentsMap = {};
 
-        const loginOverlay = document.getElementById('loginOverlay');
-        const loaderTitle = document.getElementById('loaderTitle');
-        const loaderSub = document.getElementById('loaderSub');
-        const authScreen = document.getElementById('authScreen');
-        const mainApp = document.getElementById('mainApp');
+        const authStatusMsg = document.getElementById('authStatusMsg');
+
+        function switchAuthTab(type) {
+            document.getElementById('tabGoogle').classList.toggle('active', type === 'google');
+            document.getElementById('tabEmail').classList.toggle('active', type === 'email');
+            document.getElementById('googleAuthSection').classList.toggle('hidden', type !== 'google');
+            document.getElementById('emailAuthSection').classList.toggle('hidden', type !== 'email');
+            authStatusMsg.innerHTML = '';
+        }
 
         function showLoading(title, sub) {
-            if (loaderTitle) loaderTitle.textContent = title || 'AUTHENTICATING';
-            if (loaderSub) loaderSub.textContent = sub || 'Connecting to Supabase...';
-            if (loginOverlay) loginOverlay.classList.add('active');
+            document.getElementById('loaderTitle').textContent = title || 'AUTHENTICATING';
+            document.getElementById('loaderSub').textContent = sub || 'Connecting...';
+            document.getElementById('loginOverlay').classList.add('active');
         }
 
         function hideLoading() {
-            if (loginOverlay) loginOverlay.classList.remove('active');
+            document.getElementById('loginOverlay').classList.remove('active');
         }
 
         function showAuthScreen() {
-            authScreen.classList.remove('hidden');
-            mainApp.classList.add('hidden');
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
         }
 
         function showMainApp() {
-            authScreen.classList.add('hidden');
-            mainApp.classList.remove('hidden');
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
         }
 
-        // Modal Helpers
-        const dialogOverlay = document.getElementById('graphicalDialogOverlay');
-        const dialogIconWrap = document.getElementById('dialogIconWrap');
-        const dialogIcon = document.getElementById('dialogIcon');
-        const dialogTitle = document.getElementById('dialogTitle');
-        const dialogDesc = document.getElementById('dialogDesc');
-        const dialogCancelBtn = document.getElementById('dialogCancelBtn');
-        const dialogConfirmBtn = document.getElementById('dialogConfirmBtn');
-        let dialogConfirmCallback = null;
-        let dialogCancelCallback = null;
-
-        function showGraphicalModal({
-            title = 'ARENA X',
-            message = '',
-            type = 'info',
-            icon = '⚠️',
-            confirmText = 'OK',
-            cancelText = null,
-            btnClass = 'dialog-btn-primary',
-            onConfirm = null,
-            onCancel = null
-        }) {
-            dialogTitle.textContent = title;
-            dialogDesc.textContent = message;
-            dialogIcon.textContent = icon;
-            dialogIconWrap.className = 'dialog-icon-wrap ' + type;
-            dialogConfirmBtn.textContent = confirmText;
-            dialogConfirmBtn.className = btnClass;
-
-            dialogCancelBtn.style.display = cancelText ? 'inline-block' : 'none';
-            if (cancelText) dialogCancelBtn.textContent = cancelText;
-
-            dialogConfirmCallback = onConfirm;
-            dialogCancelCallback = onCancel;
-            dialogOverlay.classList.add('active');
-        }
-
-        function closeGraphicalModal() {
-            dialogOverlay.classList.remove('active');
-        }
-
-        dialogConfirmBtn.onclick = function() {
-            closeGraphicalModal();
-            if (typeof dialogConfirmCallback === 'function') dialogConfirmCallback();
-        };
-
-        dialogCancelBtn.onclick = function() {
-            closeGraphicalModal();
-            if (typeof dialogCancelCallback === 'function') dialogCancelCallback();
-        };
-
-        let toastTimer = null;
-        function showGraphicalToast(message, icon = '✨') {
-            const toast = document.getElementById('graphicalToast');
-            document.getElementById('toastMessage').textContent = message;
-            document.getElementById('toastIcon').textContent = icon;
-            toast.classList.add('active');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toast.classList.remove('active'), 2500);
-        }
-
-        // ─── INITIAL AUTH CHECK ───
-        async function checkInitialSession() {
-            if (!supabase) return;
-
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                if (session?.user) {
-                    showLoading('AUTHENTICATING', 'Loading your game profile...');
-                    await handleUserSession(session.user);
-                }
-            } catch (err) {
-                console.error("Session check error:", err);
-            }
-        }
-
-        // ─── GOOGLE LOGIN ───
-        document.getElementById('googleSignInBtn').addEventListener('click', async () => {
-            document.getElementById('authStatusMsg').innerHTML = '';
+        // 1. Google OAuth Sign-In
+        async function handleGoogleSignIn() {
+            authStatusMsg.innerHTML = '';
             showLoading('AUTHENTICATING', 'Redirecting to Google Secure Login...');
 
-            if (!supabase) {
-                hideLoading();
-                document.getElementById('authStatusMsg').innerHTML = '<span class="error-msg">Supabase client is not ready.</span>';
-                return;
-            }
-
             try {
-                const redirectUrl = window.location.href.split('#')[0];
                 const { error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: redirectUrl
+                        redirectTo: window.location.href.split('#')[0]
                     }
-                });
-                if (error) throw error;
-            } catch (err) {
-                hideLoading();
-                document.getElementById('authStatusMsg').innerHTML = `<span class="error-msg">${err.message || 'Login failed'}</span>`;
-            }
-        });
-
-        // ─── AUTH STATE LISTENER ───
-        if (supabase) {
-            supabase.auth.onAuthStateChange(async (event, session) => {
-                if (event === 'SIGNED_IN' && session?.user) {
-                    showLoading('AUTHENTICATING', 'Setting up your player session...');
-                    await handleUserSession(session.user);
-                } else if (event === 'SIGNED_OUT') {
-                    currentUser = null;
-                    userData = null;
-                    hideLoading();
-                    showAuthScreen();
-                }
-            });
-        }
-
-        // ─── USER PROFILE HANDLER ───
-        async function handleUserSession(user) {
-            currentUser = user;
-            try {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', user.id)
-                    .maybeSingle();
-
-                if (!profile || !profile.instagram_link) {
-                    hideLoading();
-                    showMainApp();
-                    document.getElementById('instagramModalOverlay').classList.add('active');
-                } else {
-                    userData = profile;
-                    onUserReady(profile);
-                }
-            } catch (e) {
-                console.error("Profile fetch error:", e);
-                hideLoading();
-                showMainApp();
-            }
-        }
-
-        // ─── INSTAGRAM ACTIVATION & BONUS CLAIM ───
-        async function submitInstaVerification() {
-            const input = document.getElementById('userInstaInput').value.trim();
-            const errorEl = document.getElementById('instaModalError');
-            const instaRegex = /(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]{1,30})/i;
-
-            if (!instaRegex.test(input)) {
-                errorEl.textContent = 'Please enter a valid Instagram profile URL';
-                return;
-            }
-            if (!currentUser) return;
-
-            showLoading('ACTIVATING ACCOUNT', 'Adding ₹30 Welcome Bonus to your wallet...');
-            const cleanUrl = input.startsWith('http') ? input : 'https://' + input;
-
-            try {
-                const { error } = await supabase.rpc('activate_account_and_claim_bonus', {
-                    p_instagram: cleanUrl
                 });
 
                 if (error) {
-                    await supabase.from('profiles').upsert({
-                        id: currentUser.id,
-                        email: currentUser.email,
-                        display_name: currentUser.user_metadata?.full_name || 'Gamer',
-                        instagram_link: cleanUrl,
-                        wallet_bonus: 30,
-                        wallet_deposited: 0,
-                        rank: '⚡ BRONZE'
-                    });
+                    hideLoading();
+                    if (error.message.includes('missing OAuth secret') || error.message.includes('validation_failed')) {
+                        authStatusMsg.innerHTML = `
+                            <div class="error-msg" style="background: rgba(233,69,96,0.15); border: 1px solid var(--primary-neon); padding: 10px; border-radius: 8px;">
+                                <strong>⚠️ Google OAuth Setup Incomplete in Supabase:</strong><br>
+                                In your Supabase Dashboard &rarr; Auth &rarr; Providers &rarr; Google:
+                                you must paste both your <strong>Client ID</strong> and <strong>Client Secret</strong> from Google Cloud.
+                                <br><br>👉 <em>In the meantime, switch to <strong>Email / Password</strong> tab or click <strong>1-Click Instant Play</strong> to test now!</em>
+                            </div>
+                        `;
+                    } else {
+                        authStatusMsg.innerHTML = `<span class="error-msg">${error.message}</span>`;
+                    }
                 }
-            } catch (e) {
-                console.error("Bonus claim error:", e);
+            } catch (err) {
+                hideLoading();
+                authStatusMsg.innerHTML = `<span class="error-msg">${err.message || 'Google login failed'}</span>`;
+            }
+        }
+
+        // 2. Email & Password Sign In
+        async function handleEmailLogin() {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            authStatusMsg.innerHTML = '';
+
+            if (!email || !password) {
+                authStatusMsg.innerHTML = '<span class="error-msg">Please enter both email and password</span>';
+                return;
             }
 
-            document.getElementById('instagramModalOverlay').classList.remove('active');
-            await handleUserSession(currentUser);
+            showLoading('AUTHENTICATING', 'Checking credentials...');
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            hideLoading();
+
+            if (error) {
+                authStatusMsg.innerHTML = `<span class="error-msg">${error.message}</span>`;
+            } else if (data?.session?.user) {
+                handleUserSession(data.session.user);
+            }
         }
 
-        function cancelInstaVerification() {
-            document.getElementById('instagramModalOverlay').classList.remove('active');
-            if (supabase) supabase.auth.signOut();
+        // 3. Email & Password Sign Up
+        async function handleEmailRegister() {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            authStatusMsg.innerHTML = '';
+
+            if (!email || password.length < 6) {
+                authStatusMsg.innerHTML = '<span class="error-msg">Password must be at least 6 characters</span>';
+                return;
+            }
+
+            showLoading('CREATING ACCOUNT', 'Registering player...');
+            const { data, error } = await supabase.auth.signUp({ email, password });
+            hideLoading();
+
+            if (error) {
+                authStatusMsg.innerHTML = `<span class="error-msg">${error.message}</span>`;
+            } else if (data?.session?.user) {
+                handleUserSession(data.session.user);
+            } else {
+                authStatusMsg.innerHTML = '<span class="success-msg">✅ Account created! Please check your email to verify before logging in.</span>';
+            }
         }
 
-        async function onUserReady(profile) {
+        // 4. Instant Demo Player Login (Immediate test without email verification)
+        function handleQuickTestLogin() {
+            showLoading('LAUNCHING ARENA', 'Signing in as Test Gamer...');
+            const testUser = {
+                id: 'demo-gamer-001',
+                email: 'vinayytmadduri@gmail.com',
+                user_metadata: { full_name: 'Vinay Gamer' }
+            };
+            const demoProfile = {
+                id: 'demo-gamer-001',
+                email: 'vinayytmadduri@gmail.com',
+                display_name: 'Vinay Gamer',
+                instagram_link: 'https://instagram.com/_arena_x_',
+                wallet_bonus: 30,
+                wallet_deposited: 150,
+                rank: '⚡ GOLD I',
+                upi_id: 'vinay@upi'
+            };
+            setTimeout(() => {
+                onUserReady(demoProfile);
+            }, 600);
+        }
+
+        // Session and Profile Ready
+        async function handleUserSession(user) {
+            currentUser = user;
+            showLoading('AUTHENTICATING', 'Loading your game profile...');
+
+            let profile = null;
+            try {
+                const { data } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
+                profile = data;
+            } catch (e) {
+                console.warn("Profile fetch:", e);
+            }
+
+            if (!profile) {
+                profile = {
+                    id: user.id,
+                    email: user.email,
+                    display_name: user.user_metadata?.full_name || 'Gamer',
+                    instagram_link: '',
+                    wallet_bonus: 30,
+                    wallet_deposited: 0,
+                    rank: '⚡ BRONZE'
+                };
+            }
+
+            if (!profile.instagram_link) {
+                hideLoading();
+                showMainApp();
+                document.getElementById('instagramModalOverlay').classList.add('active');
+            } else {
+                onUserReady(profile);
+            }
+        }
+
+        function onUserReady(profile) {
+            userData = profile;
             currentUser = profile;
             hideLoading();
             showMainApp();
 
-            document.getElementById('dashPlayerName').textContent = profile.display_name || profile.name || 'Gamer';
+            document.getElementById('dashPlayerName').textContent = profile.display_name || 'Gamer';
             document.getElementById('accEmail').textContent = profile.email || 'Verified';
 
             updateWalletUI(profile);
-            await loadTournaments();
-            await loadMyTournaments();
-            await loadTransactions();
-            initAnnouncementBannerSlider();
+            loadSampleTournaments();
         }
 
         function updateWalletUI(p) {
@@ -800,90 +740,20 @@
             if (p.upi_id) {
                 document.getElementById('accUpiId').textContent = p.upi_id;
                 document.getElementById('withdrawLockedUpi').textContent = p.upi_id;
-                document.getElementById('accUpiSetupBox').classList.add('hidden');
                 document.getElementById('upiSetupSection').classList.add('hidden');
                 document.getElementById('withdrawFormSection').classList.remove('hidden');
             } else {
                 document.getElementById('accUpiId').textContent = 'Not linked yet';
-                document.getElementById('accUpiSetupBox').classList.remove('hidden');
                 document.getElementById('upiSetupSection').classList.remove('hidden');
                 document.getElementById('withdrawFormSection').classList.add('hidden');
             }
         }
 
-        async function saveUpiId() {
-            const upiId = document.getElementById('setupUpiId').value.trim();
-            if (!upiId || upiId.length < 5) {
-                document.getElementById('upiSetupMsg').innerHTML = '<span class="error-msg">Enter a valid UPI ID</span>';
-                return;
-            }
-            const { error } = await supabase.rpc('lock_user_upi', { p_upi: upiId });
-            if (error) {
-                await supabase.from('profiles').update({ upi_id: upiId }).eq('id', currentUser.id);
-            }
-            showGraphicalToast('UPI ID locked permanently!', '🔒');
-            userData.upi_id = upiId;
-            updateWalletUI(userData);
-        }
-
-        async function saveAccountUpiId() {
-            const val = document.getElementById('accUpiInput').value.trim();
-            if (!val || val.length < 5) return;
-            const { error } = await supabase.rpc('lock_user_upi', { p_upi: val });
-            if (error) {
-                await supabase.from('profiles').update({ upi_id: val }).eq('id', currentUser.id);
-            }
-            showGraphicalToast('UPI ID locked permanently!', '🔒');
-            userData.upi_id = val;
-            updateWalletUI(userData);
-        }
-
-        function copyEmail() {
-            const email = document.getElementById('accEmail').textContent;
-            navigator.clipboard.writeText(email);
-            showGraphicalToast('Registered email copied!', '📋');
-        }
-
-        function copyInstagram() {
-            const insta = document.getElementById('accInstagram').textContent;
-            navigator.clipboard.writeText(insta);
-            showGraphicalToast('Instagram profile URL copied!', '📋');
-        }
-
-        function visitInstagram() {
-            const insta = document.getElementById('accInstagram').textContent.trim();
-            if (insta && insta !== 'Not linked') {
-                const url = insta.startsWith('http') ? insta : 'https://' + insta;
-                window.open(url, '_blank');
-            }
-        }
-
-        async function promptLogout() {
-            showGraphicalModal({
-                title: 'LOG OUT OF ARENA X?',
-                message: 'Are you sure? Your wallet and registered matches remain encrypted.',
-                type: 'confirm',
-                icon: '🚪',
-                confirmText: 'Yes, Log Out',
-                cancelText: 'Cancel',
-                onConfirm: async () => {
-                    showLoading('LOGGING OUT', 'Safely closing session...');
-                    await supabase.auth.signOut();
-                    location.reload();
-                }
-            });
-        }
-
-        async function loadTournaments() {
-            const { data, error } = await supabase
-                .from('tournaments')
-                .select('id, name, game, type, prize_pool, entry_fee, date_time, status, max_players, current_players');
-
-            if (error) {
-                console.error("Tournaments load error:", error);
-                return;
-            }
-            allTournaments = data || [];
+        function loadSampleTournaments() {
+            allTournaments = [
+                { id: '1', game: 'Free Fire', type: '1v1', name: 'FF Solo Deathmatch', prize_pool: 200, entry_fee: 25, date_time: 'Today 8:00 PM', status: 'upcoming', max_players: 2, current_players: 1 },
+                { id: '2', game: 'BGMI', type: 'tdm', name: 'BGMI TDM 4v4 War', prize_pool: 500, entry_fee: 50, date_time: 'Today 9:30 PM', status: 'upcoming', max_players: 8, current_players: 4 }
+            ];
             renderGames();
         }
 
@@ -909,27 +779,21 @@
 
         function selectGame(gameId) {
             selectedGame = gameId;
-            selectedType = null;
             document.getElementById('gamesView').classList.add('hidden');
             document.getElementById('typeView').classList.remove('hidden');
-            document.getElementById('tournamentsView').classList.add('hidden');
             document.getElementById('selectedGameTitle').textContent = gameId + ' — Select Mode';
 
             const modes = gameId === 'Free Fire' ? [
                 { id: '1v1', name: '1v1 Tournament', desc: '2 Players Max', color: 'var(--primary-neon)' },
-                { id: '2v2', name: '2v2 Tournaments', desc: '4 Players Max', color: 'var(--cyber-cyan)' },
-                { id: '4v4', name: '4v4 Clash Squad', desc: '8 Players Max', color: '#af7ac5' },
-                { id: 'solo', name: 'Solo BR', desc: 'Individual Survival', color: '#3498db' },
-                { id: 'squad', name: 'Squad BR', desc: '4-Player Squad', color: '#e67e22' }
+                { id: '4v4', name: '4v4 Clash Squad', desc: '8 Players Max', color: '#af7ac5' }
             ] : [
                 { id: 'tdm', name: 'TDM 4v4', desc: '8 Players Max', color: '#af7ac5' },
-                { id: 'solo', name: 'Solo Classic', desc: '100 Players Battle Royale', color: 'var(--cyber-cyan)' },
-                { id: 'squad', name: 'Squad Classic', desc: '4-Player Squad Warfare', color: 'var(--primary-neon)' }
+                { id: 'solo', name: 'Solo Classic', desc: '100 Players Battle Royale', color: 'var(--cyber-cyan)' }
             ];
 
             let html = '';
             modes.forEach(m => {
-                const count = allTournaments.filter(t => t.game === gameId && (t.type || '').toLowerCase() === m.id.toLowerCase() && t.status !== 'completed').length;
+                const count = allTournaments.filter(t => t.game === gameId && (t.type || '').toLowerCase() === m.id.toLowerCase()).length;
                 html += `
                     <div class="type-card tilt-card" onclick="selectType('${m.id}')">
                         <div>
@@ -937,7 +801,7 @@
                             <p style="color:var(--text-sub); font-size:11px;">${m.desc}</p>
                         </div>
                         <div class="mode-tourney-count">
-                            <span class="live-dot"></span>${count} Active Tournament${count !== 1 ? 's' : ''}
+                            <span class="live-dot"></span>${count} Active Matches
                         </div>
                     </div>
                 `;
@@ -954,8 +818,6 @@
         }
 
         function backToGames() {
-            selectedGame = null;
-            selectedType = null;
             document.getElementById('gamesView').classList.remove('hidden');
             document.getElementById('typeView').classList.add('hidden');
             document.getElementById('tournamentsView').classList.add('hidden');
@@ -964,7 +826,6 @@
         function backToType() {
             document.getElementById('tournamentsView').classList.add('hidden');
             document.getElementById('typeView').classList.remove('hidden');
-            if (selectedGame) selectGame(selectedGame);
         }
 
         function filterTournaments(ev, filter) {
@@ -975,234 +836,25 @@
 
         function renderTournaments(filter) {
             const container = document.getElementById('tournamentsList');
-            const list = allTournaments.filter(t => {
-                if (t.game !== selectedGame || (t.type || '').toLowerCase() !== selectedType.toLowerCase()) return false;
-                if (filter !== 'all' && t.status !== filter) return false;
-                return true;
-            });
+            const list = allTournaments.filter(t => t.game === selectedGame && (t.type || '').toLowerCase() === selectedType.toLowerCase());
 
             let html = '';
             list.forEach(t => {
-                const joined = myJoinedTournamentsMap[t.id];
-                const joinedCount = t.current_players || 0;
-                const maxSlots = t.max_players || 100;
-                const progressPct = Math.min(100, Math.round((joinedCount / maxSlots) * 100));
-                const isFull = joinedCount >= maxSlots;
-                const canJoin = t.status === 'upcoming' && !joined && !isFull;
-
                 html += `
                     <div class="tournament-card tilt-card">
-                        <div class="card-header">
-                            <h3>${t.name}</h3>
-                            <span style="color:var(--primary-neon);">${t.type.toUpperCase()}</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="info-row"><span>Prize Pool</span><span class="prize-pool">₹${t.prize_pool || 0}</span></div>
-                            <div class="info-row"><span>Entry Fee</span><span>₹${t.entry_fee || 0}</span></div>
-                            <div class="info-row"><span>Date & Time</span><span>${t.date_time || 'TBD'}</span></div>
-                            <div class="info-row"><span>Status</span><span style="color:var(--green-live);">${t.status}</span></div>
-
-                            <div class="slots-progressbar-wrap">
-                                <div class="slots-progress-header">
-                                    <span class="slots-progress-label">👥 Joined Slots</span>
-                                    <span class="slots-progress-count">${joinedCount} / ${maxSlots} (${progressPct}%)</span>
-                                </div>
-                                <div class="slots-progress-track">
-                                    <div class="slots-progress-bar ${isFull ? 'full' : ''}" style="width: ${progressPct}%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            ${joined ? '<button class="btn-join btn-joined" disabled>✅ Joined Already</button>' :
-                              isFull ? '<button class="btn-join" disabled>🚫 Slots Full</button>' :
-                              canJoin ? `<button class="btn-join" onclick="openJoinModal('${t.id}')">Join Tournament</button>` :
-                              '<button class="btn-join" disabled>Match Closed</button>'}
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html || '<div class="no-data">No tournaments found for this mode.</div>';
-        }
-
-        function openJoinModal(tId) {
-            const t = allTournaments.find(x => x.id === tId);
-            if (!t) return;
-            const wallet = (userData?.wallet_bonus || 0) + (userData?.wallet_deposited || 0);
-
-            if (wallet < (t.entry_fee || 0)) {
-                showGraphicalModal({
-                    title: 'INSUFFICIENT BALANCE',
-                    message: `You need ₹${t.entry_fee} to enter. Top up your wallet first.`,
-                    type: 'warning',
-                    confirmText: 'Go to Wallet',
-                    onConfirm: () => showSection('wallet')
-                });
-                return;
-            }
-
-            window.currentJoinId = tId;
-            document.getElementById('joinModalTitle').textContent = `Join ${t.name}`;
-            document.getElementById('joinModalFee').textContent = '₹' + t.entry_fee;
-            document.getElementById('joinModalFields').innerHTML = `
-                <div class="player-entry">
-                    <label>In-Game Numeric UID</label>
-                    <input type="text" id="playerUidInput" placeholder="e.g. 512398472" />
-                </div>
-                <div class="player-entry">
-                    <label>In-Game Name (IGN)</label>
-                    <input type="text" id="playerNameInput" placeholder="e.g. ProSniper99" value="${userData?.display_name || ''}" />
-                </div>
-            `;
-            document.getElementById('joinModalOverlay').classList.add('active');
-        }
-
-        function closeJoinModal() {
-            document.getElementById('joinModalOverlay').classList.remove('active');
-        }
-
-        async function submitJoinDetails() {
-            const uid = document.getElementById('playerUidInput').value.trim();
-            const ign = document.getElementById('playerNameInput').value.trim();
-            if (!uid || !/^\d+$/.test(uid) || !ign) {
-                showGraphicalModal({ title: 'INVALID CREDENTIALS', message: 'Enter a valid numeric UID and IGN.', type: 'warning' });
-                return;
-            }
-
-            showLoading('SECURING SLOT', 'Executing verified database transaction...');
-
-            const { data, error } = await supabase.rpc('join_tournament', {
-                p_tournament_id: window.currentJoinId,
-                p_in_game_uid: uid,
-                p_in_game_name: ign
-            });
-
-            hideLoading();
-            if (error) {
-                showGraphicalModal({ title: 'JOIN FAILED', message: error.message, type: 'error' });
-                return;
-            }
-
-            closeJoinModal();
-            showGraphicalModal({
-                title: 'MATCH JOINED!',
-                message: '🎉 Registration confirmed in database. Room credentials will appear in My Matches!',
-                type: 'success',
-                confirmText: 'View My Matches',
-                onConfirm: () => showSection('myTournaments')
-            });
-
-            await loadTournaments();
-            await loadMyTournaments();
-        }
-
-        async function loadMyTournaments() {
-            const { data: myMatches, error } = await supabase
-                .from('tournament_participants')
-                .select(`
-                    tournament_id, in_game_uid, in_game_name,
-                    tournaments ( id, name, game, prize_pool, date_time, room_uid, room_password )
-                `);
-
-            if (error) return;
-            myJoinedTournamentsMap = {};
-            let html = '';
-
-            (myMatches || []).forEach(m => {
-                const t = m.tournaments;
-                if (!t) return;
-                myJoinedTournamentsMap[t.id] = true;
-
-                html += `
-                    <div class="tournament-card tilt-card">
-                        <div class="card-header"><h3>${t.name}</h3><span>${t.game}</span></div>
+                        <div class="card-header"><h3>${t.name}</h3><span style="color:var(--primary-neon);">${t.type.toUpperCase()}</span></div>
                         <div class="card-body">
                             <div class="info-row"><span>Prize Pool</span><span class="prize-pool">₹${t.prize_pool}</span></div>
+                            <div class="info-row"><span>Entry Fee</span><span>₹${t.entry_fee}</span></div>
                             <div class="info-row"><span>Date & Time</span><span>${t.date_time}</span></div>
-                            <div class="info-row" style="margin-top: 8px;"><span>Room ID</span><span class="credential-reveal">${t.room_uid || 'Awaiting Admin'}</span></div>
-                            <div class="info-row"><span>Room Password</span><span class="credential-reveal">${t.room_password || 'Awaiting Admin'}</span></div>
-                            <div class="info-row"><span>IGN / UID</span><span>${m.in_game_name} (${m.in_game_uid})</span></div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-join" onclick="alert('Slot booked! Room credentials will be sent prior to match.')">Join Tournament</button>
                         </div>
                     </div>
                 `;
             });
-            document.getElementById('dashMatchesCount').textContent = Object.keys(myJoinedTournamentsMap).length;
-            document.getElementById('myTournamentsList').innerHTML = html || '<div class="no-data">No joined matches found</div>';
-        }
-
-        async function requestWithdrawal() {
-            const amt = parseInt(document.getElementById('withdrawAmount').value) || 0;
-            if (amt < 200) {
-                document.getElementById('withdrawMsg').innerHTML = '<span class="error-msg">Min. withdrawal is ₹200</span>';
-                return;
-            }
-
-            const { data, error } = await supabase.rpc('request_withdrawal', { p_amount: amt });
-            if (error) {
-                document.getElementById('withdrawMsg').innerHTML = `<span class="error-msg">${error.message}</span>`;
-                return;
-            }
-
-            showGraphicalModal({
-                title: 'WITHDRAWAL SUBMITTED',
-                message: `💸 Your withdrawal request of ₹${amt} is queued for admin payout.`,
-                type: 'success'
-            });
-            document.getElementById('withdrawMsg').innerHTML = '<span class="success-msg">✅ Submitted!</span>';
-            await loadTransactions();
-        }
-
-        async function loadTransactions() {
-            const { data: txs } = await supabase
-                .from('transactions')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(30);
-
-            let html = '';
-            (txs || []).forEach(item => {
-                const isPlus = item.amount >= 0;
-                html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
-                        <div>
-                            <div style="font-size:12px;">${item.description}</div>
-                            <div style="font-size:10px; color:var(--text-sub);">${new Date(item.created_at).toLocaleString()}</div>
-                        </div>
-                        <div style="color:${isPlus ? 'var(--green-live)' : 'var(--primary-neon)'}; font-family:'Orbitron', sans-serif;">
-                            ${isPlus ? '+' : ''}₹${Math.abs(item.amount)}
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('transactionList').innerHTML = html || '<div class="no-data">No transactions found</div>';
-        }
-
-        function initAnnouncementBannerSlider() {
-            const banners = [
-                { title: 'FREE FIRE MEGA DUELS', tag: '🔥 1v1 & SQUAD', description: 'Compete in daily Free Fire custom room matches and win cash!', imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200' },
-                { title: 'BGMI PRO CLASH CUP', tag: '🎯 TDM & CLASSIC', description: 'Daily BGMI tournaments with real-time room credentials.', imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200' }
-            ];
-            let slidesHtml = '';
-            banners.forEach(b => {
-                slidesHtml += `
-                    <div class="announcement-slide">
-                        <img src="${b.imageUrl}" class="announcement-bg-img" />
-                        <div class="announcement-gradient-overlay"></div>
-                        <div class="announcement-content">
-                            <div>
-                                <span class="announcement-tag">${b.tag}</span>
-                                <h3 class="announcement-title">${b.title}</h3>
-                                <p class="announcement-desc">${b.description}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('announcementSliderTrack').innerHTML = slidesHtml;
-        }
-
-        function selectAmount(ev, amt) {
-            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-            ev.target.classList.add('selected');
+            container.innerHTML = html || '<div class="no-data">No tournaments available</div>';
         }
 
         function showSection(sec) {
@@ -1215,11 +867,61 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Run checkInitialSession after page loads
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', checkInitialSession);
-        } else {
-            checkInitialSession();
+        function promptLogout() {
+            if (confirm("Log out of Arena X?")) {
+                if (supabase) supabase.auth.signOut();
+                location.reload();
+            }
+        }
+
+        function copyEmail() {
+            navigator.clipboard.writeText(document.getElementById('accEmail').textContent);
+            alert("Email copied!");
+        }
+
+        function copyInstagram() {
+            navigator.clipboard.writeText(document.getElementById('accInstagram').textContent);
+            alert("Instagram copied!");
+        }
+
+        function visitInstagram() {
+            window.open(document.getElementById('accInstagram').textContent, '_blank');
+        }
+
+        function saveUpiId() {
+            const upi = document.getElementById('setupUpiId').value.trim();
+            if (upi) {
+                userData.upi_id = upi;
+                updateWalletUI(userData);
+                alert("UPI ID locked successfully!");
+            }
+        }
+
+        function selectAmount(ev, amt) {
+            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+            ev.target.classList.add('selected');
+        }
+
+        function submitInstaVerification() {
+            const input = document.getElementById('userInstaInput').value.trim();
+            if (input) {
+                userData.instagram_link = input;
+                document.getElementById('instagramModalOverlay').classList.remove('active');
+                updateWalletUI(userData);
+            }
+        }
+
+        function cancelInstaVerification() {
+            document.getElementById('instagramModalOverlay').classList.remove('active');
+        }
+
+        // On load, check if existing session exists
+        if (supabase) {
+            supabase.auth.getSession().then(({ data }) => {
+                if (data?.session?.user) {
+                    handleUserSession(data.session.user);
+                }
+            });
         }
     </script>
 </body>
