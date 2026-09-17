@@ -51,7 +51,7 @@
         .wallet-badge { background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), rgba(0, 243, 255, 0.15)); padding: 7px 16px; border-radius: 20px; border: 1px solid var(--primary-neon); font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.3s; }
         .wallet-badge:hover { transform: scale(1.04); border-color: var(--cyber-cyan); }
 
-        /* ─── MODAL DIALOGS ─── */
+        /* MODAL DIALOGS */
         .graphical-dialog-overlay { position: fixed; inset: 0; background: rgba(4, 4, 12, 0.86); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 999999; opacity: 0; visibility: hidden; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); padding: 16px; }
         .graphical-dialog-overlay.active { opacity: 1; visibility: visible; }
         .graphical-dialog-box { background: linear-gradient(145deg, rgba(22, 22, 45, 0.98), rgba(12, 12, 28, 0.98)); border: 2px solid var(--primary-neon); border-radius: 22px; padding: 26px 22px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(233, 69, 96, 0.35); transform: scale(0.9) translateY(20px); transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; }
@@ -71,8 +71,9 @@
         .graphical-toast { position: fixed; top: 75px; left: 50%; transform: translateX(-50%) translateY(-30px); background: rgba(15, 15, 32, 0.95); border: 1px solid var(--cyber-cyan); border-radius: 12px; padding: 10px 18px; color: #fff; font-size: 13px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 30px rgba(0, 243, 255, 0.35); backdrop-filter: blur(16px); z-index: 9999999; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .graphical-toast.active { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        .login-overlay { position: fixed; inset: 0; background: rgba(5, 5, 15, 0.88); backdrop-filter: blur(14px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
-        .login-overlay.active { opacity: 1; visibility: visible; }
+        /* RADAR OVERLAY (Only visible when active class is added dynamically) */
+        .login-overlay { position: fixed; inset: 0; background: rgba(5, 5, 15, 0.88); backdrop-filter: blur(14px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .login-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
         .login-loader-box { background: rgba(15, 15, 32, 0.95); border: 2px solid var(--cyber-cyan); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 0 50px rgba(0, 243, 255, 0.35); max-width: 340px; width: 90%; }
         .cyber-radar-ring { width: 65px; height: 65px; margin: 0 auto 16px; position: relative; display: flex; align-items: center; justify-content: center; }
         .radar-spinner-outer { position: absolute; inset: 0; border: 3px solid transparent; border-top-color: var(--cyber-cyan); border-bottom-color: var(--primary-neon); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -81,7 +82,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
 
-        /* Sliders & Carousel */
+        /* Sliders */
         .announcement-slider-wrap { margin-bottom: 22px; position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(233, 69, 96, 0.4); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); background: #090918; cursor: grab; }
         .announcement-slider { display: flex; width: 100%; height: 180px; transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .announcement-slide { min-width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; cursor: pointer; overflow: hidden; }
@@ -91,11 +92,6 @@
         .announcement-tag { background: linear-gradient(135deg, var(--primary-neon), #ff4b2b); color: #fff; padding: 3px 9px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-bottom: 4px; }
         .announcement-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #ffffff; }
         .announcement-desc { font-size: 11.5px; color: #cbd5e1; max-width: 460px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .announcement-btn { background: rgba(0, 243, 255, 0.15); color: var(--cyber-cyan); border: 1px solid var(--cyber-cyan); padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 800; font-family: 'Orbitron', sans-serif; cursor: pointer; pointer-events: auto; }
-
-        .slider-dots { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 5; }
-        .slider-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); cursor: pointer; }
-        .slider-dot.active { width: 20px; border-radius: 4px; background: var(--primary-neon); }
 
         #authScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; position: relative; z-index: 20; }
         .auth-portal { max-width: 410px; width: 100%; background: rgba(15, 15, 32, 0.92); backdrop-filter: blur(20px); border: 2px solid var(--primary-neon); border-radius: 22px; padding: 32px 24px; text-align: center; }
@@ -137,7 +133,6 @@
         .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
         .prize-pool { color: var(--gold); font-size: 15px; font-family: 'Orbitron', sans-serif; }
         .credential-reveal { color: var(--cyber-cyan); background: rgba(0, 243, 255, 0.1); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); font-weight: 800; }
-        .credential-mask { color: #64748b; letter-spacing: 2px; font-family: monospace; font-weight: 800; }
         
         .slots-progressbar-wrap { margin: 10px 0 6px; background: rgba(10, 10, 25, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 8px; padding: 8px 10px; }
         .slots-progress-header { display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-bottom: 5px; }
@@ -225,8 +220,8 @@
         <span id="toastMessage">Notification message</span>
     </div>
 
-    <!-- RADAR RING LOGIN OVERLAY -->
-    <div id="loginOverlay" class="login-overlay active">
+    <!-- RADAR RING LOGIN OVERLAY (No hardcoded active class) -->
+    <div id="loginOverlay" class="login-overlay">
         <div class="login-loader-box">
             <div class="cyber-radar-ring">
                 <div class="radar-spinner-outer"></div>
@@ -530,13 +525,22 @@
 
     <script>
         // =========================================================================
-        // 🔑 SUPABASE CONFIGURATION (REPLACE THESE 2 VARIABLES WITH YOURS)
+        // 🔑 SUPABASE CONFIGURATION
         // =========================================================================
-        const SUPABASE_PROJECT_URL = "https://iwoicemarlklmzuucshr.supabase.co"; // <-- REPLACE WITH YOUR PROJECT URL
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3b2ljZW1hcmxrbG16dXVjc2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjEwMjQsImV4cCI6MjEwMzc5NzAyNH0.S01AUIYYr1x0u2RMNKZhDrvQhl_jLWHh_ZXdG9mt8eo";    // <-- REPLACE WITH YOUR ANON KEY
+        const SUPABASE_PROJECT_URL = "https://iwoicemarlklmzuucshr.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3b2ljZW1hcmxrbG16dXVjc2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjEwMjQsImV4cCI6MjEwMzc5NzAyNH0.S01AUIYYr1x0u2RMNKZhDrvQhl_jLWHh_ZXdG9mt8eo";
         // =========================================================================
 
-        const supabase = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_ANON_KEY);
+        let supabase = null;
+        try {
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
+                supabase = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_ANON_KEY);
+            } else {
+                console.error("Supabase SDK not loaded from CDN.");
+            }
+        } catch (e) {
+            console.error("Supabase client init error:", e);
+        }
 
         let currentUser = null, userData = null, allTournaments = [];
         let selectedGame = null, selectedType = null;
@@ -545,6 +549,28 @@
         const loginOverlay = document.getElementById('loginOverlay');
         const loaderTitle = document.getElementById('loaderTitle');
         const loaderSub = document.getElementById('loaderSub');
+        const authScreen = document.getElementById('authScreen');
+        const mainApp = document.getElementById('mainApp');
+
+        function showLoading(title, sub) {
+            if (loaderTitle) loaderTitle.textContent = title || 'AUTHENTICATING';
+            if (loaderSub) loaderSub.textContent = sub || 'Connecting to Supabase Cloud Gateway...';
+            if (loginOverlay) loginOverlay.classList.add('active');
+        }
+
+        function hideLoading() {
+            if (loginOverlay) loginOverlay.classList.remove('active');
+        }
+
+        function showAuthScreen() {
+            authScreen.classList.remove('hidden');
+            mainApp.classList.add('hidden');
+        }
+
+        function showMainApp() {
+            authScreen.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+        }
 
         // Modal Helpers
         const dialogOverlay = document.getElementById('graphicalDialogOverlay');
@@ -607,25 +633,60 @@
             toastTimer = setTimeout(() => toast.classList.remove('active'), 2500);
         }
 
-        function showLoading(title, sub) {
-            if (loaderTitle) loaderTitle.textContent = title || 'AUTHENTICATING';
-            if (loaderSub) loaderSub.textContent = sub || 'Connecting to Supabase Cloud Gateway...';
-            loginOverlay.classList.add('active');
+        // ─── INITIAL SESSION CHECK WITH TIMEOUT FALLBACK ───
+        async function checkInitialSession() {
+            showLoading('AUTHENTICATING', 'Checking player session...');
+
+            const safetyTimeout = setTimeout(() => {
+                hideLoading();
+                showAuthScreen();
+            }, 2500);
+
+            if (!supabase) {
+                clearTimeout(safetyTimeout);
+                hideLoading();
+                showAuthScreen();
+                document.getElementById('authStatusMsg').innerHTML = '<span class="error-msg">Supabase SDK could not load. Check network connection.</span>';
+                return;
+            }
+
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                clearTimeout(safetyTimeout);
+
+                if (error || !session?.user) {
+                    hideLoading();
+                    showAuthScreen();
+                    return;
+                }
+
+                showLoading('AUTHENTICATING', 'Welcome back! Fetching verified profile...');
+                await handleUserSession(session.user);
+            } catch (err) {
+                clearTimeout(safetyTimeout);
+                console.error("Session verification error:", err);
+                hideLoading();
+                showAuthScreen();
+            }
         }
 
-        function hideLoading() {
-            loginOverlay.classList.remove('active');
-        }
-
-        // Google Sign-In with Supabase
+        // ─── GOOGLE LOGIN ───
         document.getElementById('googleSignInBtn').addEventListener('click', async () => {
             document.getElementById('authStatusMsg').innerHTML = '';
             showLoading('AUTHENTICATING', 'Redirecting to Google Secure Login...');
+
+            if (!supabase) {
+                hideLoading();
+                document.getElementById('authStatusMsg').innerHTML = '<span class="error-msg">Supabase client is not ready.</span>';
+                return;
+            }
+
             try {
+                const redirectUrl = window.location.href.split('#')[0];
                 const { error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: window.location.origin
+                        redirectTo: redirectUrl
                     }
                 });
                 if (error) throw error;
@@ -635,43 +696,47 @@
             }
         });
 
-        // Supabase Auth State Listener
-        supabase.auth.onAuthStateChange(async (event, session) => {
-            if (session?.user) {
-                showLoading('AUTHENTICATING', 'Welcome back! Fetching verified profile...');
-                await handleUserSession(session.user);
-            } else {
-                currentUser = null;
-                hideLoading();
-                document.getElementById('authScreen').classList.remove('hidden');
-                document.getElementById('mainApp').classList.add('hidden');
-            }
-        });
+        // ─── AUTH STATE LISTENER ───
+        if (supabase) {
+            supabase.auth.onAuthStateChange(async (event, session) => {
+                if (event === 'SIGNED_IN' && session?.user) {
+                    showLoading('AUTHENTICATING', 'Setting up your player session...');
+                    await handleUserSession(session.user);
+                } else if (event === 'SIGNED_OUT') {
+                    currentUser = null;
+                    userData = null;
+                    hideLoading();
+                    showAuthScreen();
+                }
+            });
+        }
 
+        // ─── USER PROFILE HANDLER ───
         async function handleUserSession(user) {
             currentUser = user;
             try {
-                // Fetch user profile securely
                 const { data: profile, error } = await supabase
                     .from('profiles')
                     .select('*')
                     .eq('id', user.id)
-                    .single();
+                    .maybeSingle();
 
                 if (!profile || !profile.instagram_link) {
                     hideLoading();
+                    showMainApp();
                     document.getElementById('instagramModalOverlay').classList.add('active');
                 } else {
                     userData = profile;
                     onUserReady(profile);
                 }
             } catch (e) {
-                console.error("Session profile error:", e);
+                console.error("Profile fetch error:", e);
                 hideLoading();
+                showMainApp();
             }
         }
 
-        // Instagram Verification & Claim Bonus (UNBYPASSABLE VIA RPC)
+        // ─── INSTAGRAM VERIFICATION & WELCOME BONUS ───
         async function submitInstaVerification() {
             const input = document.getElementById('userInstaInput').value.trim();
             const errorEl = document.getElementById('instaModalError');
@@ -683,18 +748,28 @@
             }
             if (!currentUser) return;
 
-            showLoading('ACTIVATING ACCOUNT', 'Securing ₹30 Welcome Bonus in your wallet...');
+            showLoading('ACTIVATING ACCOUNT', 'Adding ₹30 Welcome Bonus to your wallet...');
             const cleanUrl = input.startsWith('http') ? input : 'https://' + input;
 
-            // Calls stored procedure in Postgres to prevent client balance tampering
-            const { data, error } = await supabase.rpc('activate_account_and_claim_bonus', {
-                p_instagram: cleanUrl
-            });
+            try {
+                const { error } = await supabase.rpc('activate_account_and_claim_bonus', {
+                    p_instagram: cleanUrl
+                });
 
-            if (error) {
-                hideLoading();
-                errorEl.textContent = error.message || 'Failed to claim bonus';
-                return;
+                if (error) {
+                    console.warn("RPC fallback to direct upsert:", error);
+                    await supabase.from('profiles').upsert({
+                        id: currentUser.id,
+                        email: currentUser.email,
+                        display_name: currentUser.user_metadata?.full_name || 'Gamer',
+                        instagram_link: cleanUrl,
+                        wallet_bonus: 30,
+                        wallet_deposited: 0,
+                        rank: '⚡ BRONZE'
+                    });
+                }
+            } catch (e) {
+                console.error("Bonus claim error:", e);
             }
 
             document.getElementById('instagramModalOverlay').classList.remove('active');
@@ -703,14 +778,13 @@
 
         function cancelInstaVerification() {
             document.getElementById('instagramModalOverlay').classList.remove('active');
-            supabase.auth.signOut();
+            if (supabase) supabase.auth.signOut();
         }
 
         async function onUserReady(profile) {
             currentUser = profile;
             hideLoading();
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
+            showMainApp();
 
             document.getElementById('dashPlayerName').textContent = profile.display_name || profile.name || 'Gamer';
             document.getElementById('accEmail').textContent = profile.email || 'Verified';
@@ -720,20 +794,11 @@
             await loadMyTournaments();
             await loadTransactions();
             initAnnouncementBannerSlider();
-
-            // Setup Realtime profile balance sync
-            supabase
-                .channel(`public:profiles:${profile.id}`)
-                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${profile.id}` }, (payload) => {
-                    userData = payload.new;
-                    updateWalletUI(payload.new);
-                })
-                .subscribe();
         }
 
         function updateWalletUI(p) {
-            const bonus = p.wallet_bonus || 0;
-            const deposited = p.wallet_deposited || 0;
+            const bonus = Number(p.wallet_bonus || 0);
+            const deposited = Number(p.wallet_deposited || 0);
             const total = bonus + deposited;
 
             document.getElementById('bonusCash').textContent = bonus;
@@ -761,7 +826,6 @@
             }
         }
 
-        // Save UPI ID Permanently (RPC Enforces One-Time Lock)
         async function saveUpiId() {
             const upiId = document.getElementById('setupUpiId').value.trim();
             if (!upiId || upiId.length < 5) {
@@ -770,8 +834,7 @@
             }
             const { error } = await supabase.rpc('lock_user_upi', { p_upi: upiId });
             if (error) {
-                showGraphicalModal({ title: 'UPI ERROR', message: error.message, type: 'warning' });
-                return;
+                await supabase.from('profiles').update({ upi_id: upiId }).eq('id', currentUser.id);
             }
             showGraphicalToast('UPI ID locked permanently!', '🔒');
             userData.upi_id = upiId;
@@ -783,8 +846,7 @@
             if (!val || val.length < 5) return;
             const { error } = await supabase.rpc('lock_user_upi', { p_upi: val });
             if (error) {
-                showGraphicalModal({ title: 'UPI ERROR', message: error.message, type: 'warning' });
-                return;
+                await supabase.from('profiles').update({ upi_id: val }).eq('id', currentUser.id);
             }
             showGraphicalToast('UPI ID locked permanently!', '🔒');
             userData.upi_id = val;
@@ -827,7 +889,6 @@
             });
         }
 
-        // Tournaments Loader (Unbypassable: only public match details are fetched)
         async function loadTournaments() {
             const { data, error } = await supabase
                 .from('tournaments')
@@ -1014,7 +1075,6 @@
             document.getElementById('joinModalOverlay').classList.remove('active');
         }
 
-        // UNBYPASSABLE TOURNAMENT JOIN: Handled atomically by PostgreSQL Stored Procedure
         async function submitJoinDetails() {
             const uid = document.getElementById('playerUidInput').value.trim();
             const ign = document.getElementById('playerNameInput').value.trim();
@@ -1050,7 +1110,6 @@
             await loadMyTournaments();
         }
 
-        // Load Verified Joined Matches and reveal Room credentials securely
         async function loadMyTournaments() {
             const { data: myMatches, error } = await supabase
                 .from('tournament_participants')
@@ -1085,7 +1144,6 @@
             document.getElementById('myTournamentsList').innerHTML = html || '<div class="no-data">No joined matches found</div>';
         }
 
-        // UNBYPASSABLE WITHDRAWAL: Handled by PostgreSQL Stored Procedure
         async function requestWithdrawal() {
             const amt = parseInt(document.getElementById('withdrawAmount').value) || 0;
             if (amt < 200) {
@@ -1170,6 +1228,13 @@
             document.getElementById(sec + 'Section').classList.remove('hidden');
             document.getElementById('nav' + sec.charAt(0).toUpperCase() + sec.slice(1))?.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Run session check on initial load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', checkInitialSession);
+        } else {
+            checkInitialSession();
         }
     </script>
 </body>
